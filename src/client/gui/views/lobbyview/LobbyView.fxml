@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.gui.views.lobbyview.LobbyViewController">
+    <children>
+        <ButtonBar layoutY="333.0" prefHeight="67.0" prefWidth="350.0">
+            <buttons>
+                <Button mnemonicParsing="false" onAction="#joinGame" text="Join Game" />
+                <Button mnemonicParsing="false" onAction="#hostGame" text="Host" />
+            <Button mnemonicParsing="false" onAction="#update" text="Update" />
+                <Button mnemonicParsing="false" onAction="#quitGame" text="Quit" />
+            </buttons>
+        </ButtonBar>
+        <TableView fx:id="gameRooms" layoutX="14.0" layoutY="14.0" prefHeight="308.0" prefWidth="265.0">
+            <columns>
+                <TableColumn fx:id="listRoomId" prefWidth="75.0" text="Room Id" />
+                <TableColumn fx:id="listPlayerNames" prefWidth="189.0" text="Host name" />
+            </columns>
+        </TableView>
+        <ListView fx:id="lobbyChat" layoutX="372.0" layoutY="37.0" prefHeight="285.0" prefWidth="214.0" />
+        <Label layoutX="372.0" layoutY="14.0" text="Chat with cool gamers">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Button layoutX="534.0" layoutY="354.0" mnemonicParsing="false" onAction="#sendTextLobby" text="Send" />
+        <TextField fx:id="textToSendLobby" layoutX="373.0" layoutY="354.0" prefHeight="25.0" prefWidth="154.0" promptText="Text to send" />
+    </children>
+
+</AnchorPane>
