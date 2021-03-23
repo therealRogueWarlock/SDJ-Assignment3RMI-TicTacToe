@@ -15,12 +15,11 @@ public class RunServer {
         serverModelTester.start();
 
         /*
-        Ikke RMIServer da den er interface
-        RMIServer server = new RMIServer();
+        //TODO: Dette skal til RMIServerImpl
         Registry registry = LocateRegistry.createRegistry(1099);
         registry.bind(Util.SERVERNAME, server);
         System.out.println("Server Started!");
-
+        --> RMIServerImpl
          */
 
 
