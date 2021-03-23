@@ -1,14 +1,31 @@
 package client.networking;
 
+import shared.networking.RMIServer;
 import shared.transferobjects.Message;
 import shared.transferobjects.Request;
+import shared.util.Util;
 
 import java.beans.PropertyChangeListener;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 public class RMIClient implements Client{
 
+    private RMIServer rmiServer;
+
     @Override
     public void start() {
+        try
+        {
+            Registry registry = LocateRegistry.getRegistry("localhost", 1099);
+            rmiServer = (RMIServer) registry.lookup(Util.SERVERNAME);
+        }
+        catch (RemoteException | NotBoundException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
