@@ -7,6 +7,7 @@ import java.rmi.Remote;
 
 public interface RMIServer extends Remote {
 
+
     void startServer();
 
     void loginPlayer(String playerName);
