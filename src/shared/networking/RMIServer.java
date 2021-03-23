@@ -3,13 +3,14 @@ package shared.networking;
 import server.model.lobbymodel.ServerLobbyModel;
 import shared.transferobjects.Message;
 
+import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface RMIServer extends Remote {
 
 
-    void startServer() throws RemoteException;
+    void startServer() throws RemoteException, AlreadyBoundException;
 
     void loginPlayer(String playerName) throws RemoteException;
 
