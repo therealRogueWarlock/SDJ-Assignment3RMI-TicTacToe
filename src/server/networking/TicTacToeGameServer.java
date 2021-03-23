@@ -5,6 +5,7 @@ import shared.networking.RMIServer;
 import shared.transferobjects.Message;
 import shared.util.Util;
 
+import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -15,7 +16,7 @@ public class TicTacToeGameServer implements RMIServer {
 
 
     @Override
-    public void startServer() throws RemoteException
+    public void startServer() throws RemoteException, AlreadyBoundException
     {
         //TODO: Skal der være this i bind?
         Registry registry = LocateRegistry.createRegistry(1099);
