@@ -83,35 +83,26 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 		gameRooms.removeIf(gameRoom -> gameRoom.getRoomId() == id);
 	}
 
-	public void createGameRoom( String playerName) {
+	public ServerGameRoomModel createGameRoom() {
 		ServerGameRoomModel gameRoom = new ServerGameRoomModel();
 		gameRoom.addId(gameRoomsId);
 		gameRooms.add(gameRoom);
-
-		gameRoom.addListener("resultMessage", this);
-		gameRoom.addListener("gameRoomDel",this);
-
-		// joining the game room just added
-		join(gameRoomsId, playerName);
-
-		iChanged("gameRoomAdd", new GameData(gameRoomsId, playerName));
-
 		gameRoomsId++;
+		return gameRoom;
 	}
 
 
 	@Override
-	public void join(Object object, int roomId, String playerName) {
+	public void join(PropertyChangeListener listener, int roomId, String playerName) {
+		GameRoomModel gameRoom = getGameRoomById(roomId);
 
-		ServerGameRoomModel gameRoom = (ServerGameRoomModel) getGameRoomById(roomId);
-
-		gameRoom.join((SocketServerHandler) object,playerName);
+		gameRoom.join(listener,playerName);
 
 	}
 
 	@Override
 	public void sendMessage(Message message) {
-
+		// only used on client side
 	}
 
 	@Override

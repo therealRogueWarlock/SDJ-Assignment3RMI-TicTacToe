@@ -27,7 +27,6 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 	public void join(PropertyChangeListener listener, String playerName){
 
 		this.addPlayerInfo(playerName);
-		//listener.setServerGameRoomModel(this);
 
 		System.out.println("Adding " + listener + " to " + gameRoomId + " " + this);
 
@@ -37,6 +36,7 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 		this.addListener("turnSwitch", listener);
 		this.addListener("messageAdded", listener);
 		this.addListener("gameRoomDel", listener);
+
 		this.iChanged("turnSwitch", null);
 	}
 

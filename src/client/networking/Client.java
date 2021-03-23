@@ -2,6 +2,7 @@ package client.networking;
 
 import shared.transferobjects.Message;
 import shared.transferobjects.Request;
+import shared.transferobjects.TicTacToePiece;
 import shared.util.Subject;
 
 public interface Client extends Subject {
@@ -16,7 +17,7 @@ public interface Client extends Subject {
 
 	void update();
 
-	void sendRequest(Request request);
+	void placePiece(TicTacToePiece ticTacToePiece);
 
 	void setClientName(String name);
 

@@ -27,8 +27,7 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 	}
 
 	@Override
-	public void join(Object obj, int roomId, String playerName) {
-//		System.out.println("lobbyModelCAll joinGame on client");
+	public void join(PropertyChangeListener listener, int roomId, String playerName) {
 		client.joinGame(roomId);
 	}
 

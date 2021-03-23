@@ -3,7 +3,12 @@ package shared.util;
 import shared.transferobjects.Message;
 import shared.transferobjects.TicTacToePiece;
 
+import java.beans.PropertyChangeListener;
+
 public interface GameRoomModel extends Subject {
+
+	void join(PropertyChangeListener listener, String playerName);
+
 	void placePiece(TicTacToePiece ticTacToePiece);
 
 	void sendMessage(Message message);
