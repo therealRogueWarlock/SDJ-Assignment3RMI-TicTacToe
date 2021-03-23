@@ -16,6 +16,8 @@ public interface Client extends Subject {
 
 	void update();
 
+	void sendRequest(Request request);
+
 	void setClientName(String name);
 
     String getName();

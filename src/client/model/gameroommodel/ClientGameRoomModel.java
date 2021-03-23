@@ -32,7 +32,6 @@ public class ClientGameRoomModel implements GameRoomModel, PropertyChangeListene
 		System.out.println("game room model ask client to send request");
 		ticTacToePiece.setPiece(client.getName());
 		client.sendRequest(new Request("place", ticTacToePiece));
-
 	}
 
 	@Override
