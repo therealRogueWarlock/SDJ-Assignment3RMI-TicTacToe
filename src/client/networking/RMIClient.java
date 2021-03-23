@@ -1,5 +1,6 @@
 package client.networking;
 
+import shared.networking.ClientCallback;
 import shared.networking.RMIServer;
 import shared.transferobjects.Message;
 import shared.transferobjects.Request;
@@ -12,7 +13,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class RMIClient implements Client{
+public class RMIClient implements Client, ClientCallback {
 
     private RMIServer ticTacToeGameServer;
     private String clientName;
@@ -52,6 +53,11 @@ public class RMIClient implements Client{
     @Override
     public void update() {
         ticTacToeGameServer.getServerDate();
+    }
+
+    @Override
+    public void sendRequest(Request request) {
+
     }
 
     @Override

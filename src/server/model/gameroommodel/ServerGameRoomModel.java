@@ -2,7 +2,6 @@ package server.model.gameroommodel;
 
 import server.model.chatmodel.ChatRoom;
 import server.model.gamemodel.TicTacToe;
-import server.networking.SocketServerHandler;
 import shared.transferobjects.Message;
 import shared.transferobjects.TicTacToePiece;
 import shared.util.GameRoomModel;
@@ -25,21 +24,20 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 	}
 
 
-	public void join(SocketServerHandler socketServerHandler, String playerName){
+	public void join(PropertyChangeListener listener, String playerName){
 
 		this.addPlayerInfo(playerName);
-		socketServerHandler.setServerGameRoomModel(this);
+		//listener.setServerGameRoomModel(this);
 
-		System.out.println("Adding " + socketServerHandler + " to " + gameRoomId + " " + this);
+		System.out.println("Adding " + listener + " to " + gameRoomId + " " + this);
 
-		this.addListener("piecePlaced", socketServerHandler);
-		this.addListener("win", socketServerHandler);
-		this.addListener("draw", socketServerHandler);
-		this.addListener("turnSwitch", socketServerHandler);
-		this.addListener("messageAdded", socketServerHandler);
-		this.addListener("gameRoomDel", socketServerHandler);
+		this.addListener("piecePlaced", listener);
+		this.addListener("win", listener);
+		this.addListener("draw", listener);
+		this.addListener("turnSwitch", listener);
+		this.addListener("messageAdded", listener);
+		this.addListener("gameRoomDel", listener);
 		this.iChanged("turnSwitch", null);
-
 	}
 
 

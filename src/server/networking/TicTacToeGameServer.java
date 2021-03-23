@@ -13,6 +13,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class TicTacToeGameServer implements RMIServer {
 
+    private ServerLobbyModel serverLobbyModel;
+
 
 
     @Override
@@ -23,6 +25,9 @@ public class TicTacToeGameServer implements RMIServer {
         registry.bind(Util.SERVERNAME, this);
         UnicastRemoteObject.exportObject(this, 0);
         System.out.println("Server Started!");
+
+        serverLobbyModel = new ServerLobbyModel();
+
     }
 
     @Override
@@ -31,12 +36,16 @@ public class TicTacToeGameServer implements RMIServer {
     }
 
     @Override
-    public void createGameRoom(String playerName) {
+    public void host(String playerName) {
+
+        serverLobbyModel.createGameRoom();
+
 
     }
 
     @Override
     public void joinGameRoom(int roomId, String playerName) {
+
 
     }
 

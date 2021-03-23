@@ -2,7 +2,6 @@ package server.model.lobbymodel;
 
 import server.model.chatmodel.ChatRoom;
 import server.model.gameroommodel.ServerGameRoomModel;
-import server.networking.SocketServerHandler;
 import shared.transferobjects.GameData;
 import shared.transferobjects.Message;
 import shared.util.GameRoomModel;
@@ -84,7 +83,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 		gameRooms.removeIf(gameRoom -> gameRoom.getRoomId() == id);
 	}
 
-	public void host(SocketServerHandler socketServerHandler, String playerName) {
+	public void createGameRoom( String playerName) {
 		ServerGameRoomModel gameRoom = new ServerGameRoomModel();
 		gameRoom.addId(gameRoomsId);
 		gameRooms.add(gameRoom);
@@ -93,7 +92,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 		gameRoom.addListener("gameRoomDel",this);
 
 		// joining the game room just added
-		join(socketServerHandler, gameRoomsId, playerName);
+		join(gameRoomsId, playerName);
 
 		iChanged("gameRoomAdd", new GameData(gameRoomsId, playerName));
 
