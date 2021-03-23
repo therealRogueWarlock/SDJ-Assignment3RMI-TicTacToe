@@ -14,6 +14,16 @@ public class RunServer {
         ServerModelTester serverModelTester = new ServerModelTester(ticTacToeGameServer.getServerLobbyModel());
         serverModelTester.start();
 
+        /*
+        //TODO: Dette skal til RMIServerImpl
+        Registry registry = LocateRegistry.createRegistry(1099);
+        registry.bind(Util.SERVERNAME, server);
+        System.out.println("Server Started!");
+        --> RMIServerImpl
+         */
+
+
+
     }
 
 }
