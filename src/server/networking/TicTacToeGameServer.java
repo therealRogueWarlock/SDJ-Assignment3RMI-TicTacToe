@@ -7,6 +7,8 @@ import shared.transferobjects.Message;
 public class TicTacToeGameServer implements RMIServer {
 
 
+
+
     @Override
     public void startServer() {
 
