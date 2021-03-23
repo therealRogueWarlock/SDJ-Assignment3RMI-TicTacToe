@@ -4,27 +4,28 @@ import server.model.lobbymodel.ServerLobbyModel;
 import shared.transferobjects.Message;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 public interface RMIServer extends Remote {
 
 
-    void startServer();
+    void startServer() throws RemoteException;
 
-    void loginPlayer(String playerName);
+    void loginPlayer(String playerName) throws RemoteException;
 
-    void createGameRoom(String playerName);
+    void createGameRoom(String playerName) throws RemoteException;
 
-    void joinGameRoom(int roomId, String playerName);
+    void joinGameRoom(int roomId, String playerName) throws RemoteException;
 
-    void addMessage(Message message);
+    void addMessage(Message message) throws RemoteException;
 
-    void broadcast();
+    void broadcast() throws RemoteException;
 
-    void getServerDate();
+    void getServerDate() throws RemoteException;
 
-    ServerLobbyModel getServerLobbyModel();
+    ServerLobbyModel getServerLobbyModel() throws RemoteException;
 
-    void run();
+    void run() throws RemoteException;
 
 
 }

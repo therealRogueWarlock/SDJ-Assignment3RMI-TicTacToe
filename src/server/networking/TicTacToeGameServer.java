@@ -3,13 +3,25 @@ package server.networking;
 import server.model.lobbymodel.ServerLobbyModel;
 import shared.networking.RMIServer;
 import shared.transferobjects.Message;
+import shared.util.Util;
+
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 public class TicTacToeGameServer implements RMIServer {
 
 
-    @Override
-    public void startServer() {
 
+    @Override
+    public void startServer() throws RemoteException
+    {
+        //TODO: Skal der være this i bind?
+        Registry registry = LocateRegistry.createRegistry(1099);
+        registry.bind(Util.SERVERNAME, this);
+        UnicastRemoteObject.exportObject(this, 0);
+        System.out.println("Server Started!");
     }
 
     @Override
