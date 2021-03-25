@@ -22,11 +22,10 @@ import java.util.ArrayList;
 public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     private ServerLobbyModel serverLobbyModel;
-    private ArrayList<ClientCallback> clientCallbacks;
+    private ArrayList<ClientCallback> clientCallbacks;                                                                  // FIXME: HashMap så man kan gemme et id. Ville kunne bruges til at identificere fra et gameroom
 
     @Override
-    public void startServer() throws RemoteException, AlreadyBoundException
-    {
+    public void startServer() throws RemoteException, AlreadyBoundException {
         Registry registry = LocateRegistry.createRegistry(1099);
         registry.bind(Util.SERVERNAME, this);
         UnicastRemoteObject.exportObject(this, 0);
@@ -48,24 +47,22 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         ServerGameRoomModel gameRoom = serverLobbyModel.createGameRoom();
 
         gameRoom.addListener("resultMessage", this);
-        gameRoom.addListener("gameRoomDel",this);
+        gameRoom.addListener("gameRoomDel", this);
 
 
-        PropertyChangeListener listener = new PropertyChangeListener() {
-
+        PropertyChangeListener listener = new PropertyChangeListener() {                                                // FIXME: Sander, Klienten skal have at vide, at der er oprettet et nyt rum
             @Override
-            public void propertyChange(PropertyChangeEvent evt) {
+            public void propertyChange(PropertyChangeEvent evt) {                                                       // FIXME: Den får intet evt??
                 try {
-                    clientCallback.updated(evt);
+                    System.out.println("TicTacToeGameServer (line 57)...");
+                System.out.println(evt);                                                                                // FIXME: evt = "turnSwitch", oldValue = null, newValue = null (???)
+                    clientCallback.updated(evt);                                                                        // FIXME: Hvad er evt?
                 } catch (RemoteException e) {
                     serverLobbyModel.removeListener("updated", this);
                 }
-
             }
         };
-
         gameRoom.join(listener, playerName);
-
     }
 
     @Override
@@ -108,7 +105,7 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         return serverData;
     }
 
-    public void registerListener(ClientCallback clientCallback){
+    public void registerListener(ClientCallback clientCallback) {
         clientCallbacks.add(clientCallback);
 
 
@@ -135,21 +132,21 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     @Override
     public void removeListener(ClientCallback client) {
+        System.out.println("Client: " + client + " has disconnected...");
         clientCallbacks.remove(client);
     }
 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("TictacToe server firede change");
+        System.out.println("TicTacToeGameServer (line 145)...");
 
-        for (ClientCallback client:clientCallbacks) {
+        for (ClientCallback client : clientCallbacks) {
             try {
                 client.updated(evt);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
-
     }
 }

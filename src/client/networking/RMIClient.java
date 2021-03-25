@@ -90,7 +90,7 @@ public class RMIClient implements Client, ClientCallback {
 
     @Override
     public void updated(Object obj) throws RemoteException {
-
+        System.out.println(obj);
     }
 
     @Override
