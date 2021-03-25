@@ -11,6 +11,7 @@ import shared.util.Util;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     private ServerLobbyModel serverLobbyModel;
-
+    private PropertyChangeSupport support;
 
 
     @Override
@@ -33,6 +34,10 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         System.out.println("Server Started!");
 
         serverLobbyModel = new ServerLobbyModel();
+
+        serverLobbyModel.addListener("Updated",this);
+        support = new PropertyChangeSupport(this);
+
 
     }
 
@@ -80,6 +85,8 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     public void registerListener(ClientCallback listener){
 
         serverLobbyModel.addListener("updated", new PropertyChangeListener() {
+
+
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 try {
@@ -87,6 +94,8 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
                 } catch (RemoteException e) {
                     serverLobbyModel.removeListener("updated", this);
                 }
+
+
             }
         });
 
@@ -97,14 +106,11 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         return null;
     }
 
-    @Override
-    public void run() {
 
-    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        support.firePropertyChange(evt);
         //todo: needs to broad cast when games end and if a game room is removed.
     }
 }

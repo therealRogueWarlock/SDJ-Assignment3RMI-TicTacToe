@@ -35,7 +35,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 		System.out.println("Add message to lobby " + message.getName() + " " + message.getStringMessage());
 		chatRoom.addMessage(message);
 		System.out.println(getAllMessages().toString());
-		iChanged("messageAdded", message);
+		iChanged("messageAddedLobby", message);
 	}
 
 	public void addPlayer(String name) {

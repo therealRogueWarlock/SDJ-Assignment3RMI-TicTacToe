@@ -35,7 +35,7 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 		clientLobbyModel.addListener("gameRoomAdd", this);
 		clientLobbyModel.addListener("gameRoomDel", this);
 		clientLobbyModel.addListener("messageAddedLobby", this);
-		clientLobbyModel.addListener("updateReply",this);
+		clientLobbyModel.addListener("Update",this);
 
 		txtMessage = new SimpleStringProperty();
 

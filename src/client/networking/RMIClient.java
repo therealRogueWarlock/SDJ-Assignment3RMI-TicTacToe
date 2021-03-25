@@ -34,7 +34,7 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
             ticTacToeGameServer.registerListener(this);
 
             support  = new PropertyChangeSupport(this);
-
+            System.out.println("Client started connection to server");
         }
         catch (RemoteException | NotBoundException e)
         {
@@ -46,6 +46,7 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     @Override
     public void sendMessage(Message message) {
         try {
+
             ticTacToeGameServer.addMessage(message);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -78,7 +79,8 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     public void update() {
         try {
              ServerData serverData  = ticTacToeGameServer.getServerDate();
-             iChanged(serverData.getType(), serverData);
+
+             iChanged(new PropertyChangeEvent(this,"Update", null, serverData));
 
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -119,13 +121,13 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
         support.removePropertyChangeListener(propertyName,listener);
     }
 
-    private void iChanged(String eventType, Object newValue) {
-        System.out.println("ServerLobby model detect change, fire change");
-        support.firePropertyChange(eventType, null, newValue);
+    private void iChanged(PropertyChangeEvent event) {
+        System.out.println("ServerLobby model etect change, fire change");
+        support.firePropertyChange(event);
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        iChanged(evt.getPropertyName(),evt.getNewValue());
+    public void propertyChange(PropertyChangeEvent event) {
+        iChanged(event);
     }
 }

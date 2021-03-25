@@ -15,8 +15,8 @@ public class RunServer {
         ticTacToeGameServer.startServer();
 
 
-        ServerModelTester serverModelTester = new ServerModelTester(ticTacToeGameServer.getServerLobbyModel());
-        serverModelTester.start();
+        /*ServerModelTester serverModelTester = new ServerModelTester(ticTacToeGameServer.getServerLobbyModel());
+        serverModelTester.start();*/
     }
 
 }

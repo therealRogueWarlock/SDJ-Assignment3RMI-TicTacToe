@@ -19,7 +19,7 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 		this.client.addListener("gameRoomAdd", this);
 		this.client.addListener("gameRoomDel", this);
 		this.client.addListener("messageAddedLobby", this);
-		this.client.addListener("updateReply", this);
+		this.client.addListener("Update", this);
 	}
 
 	public void host() {
@@ -37,6 +37,7 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 
 	@Override
 	public void sendMessage(Message message) {
+
 		client.sendMessage(message);
 	}
 
