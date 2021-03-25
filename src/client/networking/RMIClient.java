@@ -17,7 +17,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RMIClient implements Client, ClientCallback, PropertyChangeListener {
+public class RMIClient implements Client, ClientCallback {
 
     private RMIServer ticTacToeGameServer;
     private String clientName;
@@ -73,7 +73,7 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     public void hostGame() {
 
         try {
-            ticTacToeGameServer.host(this, clientName);
+            ticTacToeGameServer.host(this,clientName);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
