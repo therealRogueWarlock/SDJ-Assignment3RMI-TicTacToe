@@ -3,7 +3,6 @@ package client.networking;
 import shared.networking.ClientCallback;
 import shared.networking.RMIServer;
 import shared.transferobjects.Message;
-import shared.transferobjects.Request;
 import shared.transferobjects.ServerData;
 import shared.transferobjects.TicTacToePiece;
 import shared.util.Util;
@@ -144,11 +143,6 @@ public class RMIClient implements Client, ClientCallback {
     private void iChanged(PropertyChangeEvent event) {
         System.out.println("ServerLobby model etect change, fire change");
         support.firePropertyChange(event);
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        iChanged(event);
     }
 
 }
