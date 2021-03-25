@@ -1,5 +1,6 @@
 package server.networking;
 
+import client.networking.RMIClient;
 import server.model.gameroommodel.ServerGameRoomModel;
 import server.model.lobbymodel.ServerLobbyModel;
 import shared.networking.ClientCallback;
@@ -11,7 +12,6 @@ import shared.util.Util;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -104,6 +104,10 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         return serverLobbyModel;
     }
 
+    @Override
+    public void removeListener(ClientCallback client) {
+        clientCallbacks.remove(client);
+    }
 
 
     @Override

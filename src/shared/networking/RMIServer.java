@@ -31,4 +31,5 @@ public interface RMIServer extends Remote {
 
     ServerLobbyModel getServerLobbyModel() throws RemoteException;
 
+    void removeListener(ClientCallback client) throws RemoteException;
 }

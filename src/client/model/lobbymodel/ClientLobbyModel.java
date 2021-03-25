@@ -56,6 +56,10 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 		support.removePropertyChangeListener(propertyName, listener);
 	}
 
+	public void quit(){
+		client.quit();
+	}
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		System.out.println("ClientLobby Model detect change" + evt.getPropertyName());

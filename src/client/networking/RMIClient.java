@@ -23,16 +23,13 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     private String clientName;
     private PropertyChangeSupport support;
 
-
     public RMIClient() {
-        support  = new PropertyChangeSupport(this);
+        support = new PropertyChangeSupport(this);
     }
 
     @Override
     public void start() {
-        try
-        {
-
+        try {
             Registry registry = LocateRegistry.getRegistry("localhost", 1099);
             ticTacToeGameServer = (RMIServer) registry.lookup(Util.SERVERNAME);
             UnicastRemoteObject.exportObject(this, 0);
@@ -40,9 +37,7 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
             ticTacToeGameServer.registerListener(this);
 
             System.out.println("Client started connection to server");
-        }
-        catch (RemoteException | NotBoundException e)
-        {
+        } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
 
@@ -84,9 +79,9 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     public void update() {
         try {
 
-             ServerData serverData  = ticTacToeGameServer.getServerDate();
+            ServerData serverData = ticTacToeGameServer.getServerDate();
 
-             iChanged(new PropertyChangeEvent(this,"Update", null, serverData));
+            iChanged(new PropertyChangeEvent(this, "Update", null, serverData));
 
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -128,7 +123,7 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
 
     @Override
     public void addListener(String propertyName, PropertyChangeListener listener) {
-        support.addPropertyChangeListener(propertyName,listener);
+        support.addPropertyChangeListener(propertyName, listener);
     }
 
     @Override
@@ -138,12 +133,20 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
 
     @Override
     public void removeListener(String propertyName, PropertyChangeListener listener) {
-        support.removePropertyChangeListener(propertyName,listener);
+        support.removePropertyChangeListener(propertyName, listener);
     }
 
     private void iChanged(PropertyChangeEvent event) {
-        System.out.println("ServerLobby model etect change, fire change");
+        System.out.println("ServerLobby model detect change, fire change");
         support.firePropertyChange(event);
+    }
+
+    @Override public void quit(){
+        try {
+            ticTacToeGameServer.removeListener(this);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

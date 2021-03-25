@@ -22,4 +22,6 @@ public interface Client extends Subject {
 	void setClientName(String name);
 
     String getName();
+
+    void quit();
 }

@@ -57,6 +57,7 @@ public class LobbyViewController implements ViewController {
 	}
 
 	public void quitGame() {
+		lobbyViewModel.quit();
 		System.exit(1);
 	}
 

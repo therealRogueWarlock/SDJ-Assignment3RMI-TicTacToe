@@ -1,5 +1,6 @@
 package client.gui.viewmodel;
 
+import client.gui.views.lobbyview.LobbyViewController;
 import client.model.lobbymodel.ClientLobbyModel;
 import client.model.lobbymodel.tableobjects.GameTableRow;
 import shared.transferobjects.GameData;
@@ -128,4 +129,8 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 			case "Update" -> updateListViews(evt);
 		}
 	}
+
+    public void quit() {
+		clientLobbyModel.quit();
+    }
 }
