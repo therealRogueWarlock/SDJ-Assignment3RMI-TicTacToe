@@ -23,20 +23,16 @@ public class RMIClient implements Client, ClientCallback {
     private PropertyChangeSupport support;
 
     public RMIClient() {
-        support  = new PropertyChangeSupport(this);
+        support = new PropertyChangeSupport(this);
     }
 
     @Override
     public void start() {
-        try
-        {
-
+        try {
             Registry registry = LocateRegistry.getRegistry("localhost", 1099);
             ticTacToeGameServer = (RMIServer) registry.lookup(Util.SERVERNAME);
             UnicastRemoteObject.exportObject(this, 0);
-
             ticTacToeGameServer.registerListener(this);
-
             System.out.println("Client started connection to server");
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
@@ -56,34 +52,27 @@ public class RMIClient implements Client, ClientCallback {
 
     @Override
     public void joinGame(int roomId) {
-
         try {
             ticTacToeGameServer.joinGameRoom(this, roomId, clientName);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void hostGame() {
-
         try {
-            ticTacToeGameServer.host(this,clientName);
+            ticTacToeGameServer.host(this, clientName);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void update() {
         try {
-
-             ServerData serverData  = ticTacToeGameServer.getServerDate();
-
-             iChanged(new PropertyChangeEvent(this,"Update", null, serverData));
-
+            ServerData serverData = ticTacToeGameServer.getServerDate();
+            iChanged(new PropertyChangeEvent(this, "Update", null, serverData));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -124,7 +113,7 @@ public class RMIClient implements Client, ClientCallback {
 
     @Override
     public void addListener(String propertyName, PropertyChangeListener listener) {
-        support.addPropertyChangeListener(propertyName,listener);
+        support.addPropertyChangeListener(propertyName, listener);
     }
 
     @Override
@@ -134,7 +123,7 @@ public class RMIClient implements Client, ClientCallback {
 
     @Override
     public void removeListener(String propertyName, PropertyChangeListener listener) {
-        support.removePropertyChangeListener(propertyName,listener);
+        support.removePropertyChangeListener(propertyName, listener);
     }
 
     private void iChanged(PropertyChangeEvent event) {
@@ -142,17 +131,12 @@ public class RMIClient implements Client, ClientCallback {
         support.firePropertyChange(event);
     }
 
-    @Override public void quit(){
+    @Override
+    public void quit() {
         try {
             ticTacToeGameServer.removeListener(this);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        iChanged(event);
-    }
-
 }
