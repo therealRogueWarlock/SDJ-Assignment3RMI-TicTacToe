@@ -15,13 +15,13 @@ public interface RMIServer extends Remote {
 
     void startServer() throws RemoteException, AlreadyBoundException;
 
-    void registerListener(ClientCallback listener) throws RemoteException;
+    void registerListener(ClientCallback clientCallback) throws RemoteException;
 
     void loginPlayer(String playerName) throws RemoteException;
 
-    void host(PropertyChangeListener listener, String playerName) throws RemoteException;
+    void host(ClientCallback clientCallback, String playerName) throws RemoteException;
 
-    void joinGameRoom(PropertyChangeListener listener, int roomId, String playerName) throws RemoteException;
+    void joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) throws RemoteException;
 
     void addMessage(Message message) throws RemoteException;
 

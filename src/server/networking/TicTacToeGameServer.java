@@ -44,17 +44,46 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     }
 
     @Override
-    public void host(PropertyChangeListener listener, String playerName) {
+    public void host(ClientCallback clientCallback, String playerName) {
         ServerGameRoomModel gameRoom = serverLobbyModel.createGameRoom();
 
         gameRoom.addListener("resultMessage", this);
         gameRoom.addListener("gameRoomDel",this);
 
+
+        PropertyChangeListener listener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                try {
+                    clientCallback.updated(evt);
+                } catch (RemoteException e) {
+                    serverLobbyModel.removeListener("updated", this);
+                }
+
+            }
+        };
+
         gameRoom.join(listener, playerName);
+
     }
 
     @Override
-    public void joinGameRoom(PropertyChangeListener listener, int roomId, String playerName) {
+    public void joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) {
+
+        PropertyChangeListener listener = new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                try {
+                    clientCallback.updated(evt);
+                } catch (RemoteException e) {
+                    serverLobbyModel.removeListener("updated", this);
+                }
+
+            }
+        };
+
         serverLobbyModel.join(listener, roomId, playerName);
     }
 
@@ -79,8 +108,8 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         return serverData;
     }
 
-    public void registerListener(ClientCallback listener){
-        clientCallbacks.add(listener);
+    public void registerListener(ClientCallback clientCallback){
+        clientCallbacks.add(clientCallback);
 
 
 
