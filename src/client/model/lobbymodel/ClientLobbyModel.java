@@ -47,6 +47,11 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 	}
 
 	@Override
+	public void addListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
+	}
+
+	@Override
 	public void removeListener(String propertyName, PropertyChangeListener listener) {
 		support.removePropertyChangeListener(propertyName, listener);
 	}

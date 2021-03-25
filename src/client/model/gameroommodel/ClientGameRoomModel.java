@@ -50,6 +50,11 @@ public class ClientGameRoomModel implements GameRoomModel, PropertyChangeListene
 	}
 
 	@Override
+	public void addListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
+	}
+
+	@Override
 	public void removeListener(String propertyName, PropertyChangeListener listener) {
 		support.removePropertyChangeListener(propertyName, listener);
 	}

@@ -114,6 +114,11 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 	}
 
 	@Override
+	public void addListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
+	}
+
+	@Override
 	public void removeListener(String propertyName, PropertyChangeListener listener) {
 		support.removePropertyChangeListener(propertyName, listener);
 	}

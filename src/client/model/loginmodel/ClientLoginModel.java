@@ -25,6 +25,11 @@ public class ClientLoginModel implements LoginModel {
 	}
 
 	@Override
+	public void addListener(PropertyChangeListener listener) {
+
+	}
+
+	@Override
 	public void removeListener(String propertyName, PropertyChangeListener listener) {
 
 	}

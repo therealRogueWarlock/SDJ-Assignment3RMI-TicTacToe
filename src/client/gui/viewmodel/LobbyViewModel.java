@@ -125,7 +125,7 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 				String txtMessage = message.getStringMessage();
 				Platform.runLater(() -> lobbyChatMessages.add(senderName + ": " + txtMessage));
 			}
-			case "updateReply" -> updateListViews(evt);
+			case "Update" -> updateListViews(evt);
 		}
 	}
 }

@@ -23,6 +23,11 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     private String clientName;
     private PropertyChangeSupport support;
 
+
+    public RMIClient() {
+        support  = new PropertyChangeSupport(this);
+    }
+
     @Override
     public void start() {
         try
@@ -31,9 +36,9 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
             Registry registry = LocateRegistry.getRegistry("localhost", 1099);
             ticTacToeGameServer = (RMIServer) registry.lookup(Util.SERVERNAME);
             UnicastRemoteObject.exportObject(this, 0);
+
             ticTacToeGameServer.registerListener(this);
 
-            support  = new PropertyChangeSupport(this);
             System.out.println("Client started connection to server");
         }
         catch (RemoteException | NotBoundException e)
@@ -46,7 +51,7 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     @Override
     public void sendMessage(Message message) {
         try {
-
+            message.setName(clientName);
             ticTacToeGameServer.addMessage(message);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -78,6 +83,7 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     @Override
     public void update() {
         try {
+
              ServerData serverData  = ticTacToeGameServer.getServerDate();
 
              iChanged(new PropertyChangeEvent(this,"Update", null, serverData));
@@ -97,6 +103,15 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
 
     }
 
+    @Override
+    public void updated(Object obj) throws RemoteException {
+
+    }
+
+    @Override
+    public void updated(PropertyChangeEvent evt) throws RemoteException {
+        support.firePropertyChange(evt);
+    }
 
 
     @Override
@@ -117,6 +132,11 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     }
 
     @Override
+    public void addListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    @Override
     public void removeListener(String propertyName, PropertyChangeListener listener) {
         support.removePropertyChangeListener(propertyName,listener);
     }
@@ -130,4 +150,5 @@ public class RMIClient implements Client, ClientCallback, PropertyChangeListener
     public void propertyChange(PropertyChangeEvent event) {
         iChanged(event);
     }
+
 }

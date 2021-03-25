@@ -22,6 +22,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 
 	private PropertyChangeSupport support;
 
+
 	public ServerLobbyModel() {
 		this.gameRooms = new ArrayList<>();
 		this.playerList = new PlayerList();
@@ -108,6 +109,11 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 	@Override
 	public void addListener(String propertyName, PropertyChangeListener listener) {
 		support.addPropertyChangeListener(propertyName, listener);
+	}
+
+	@Override
+	public void addListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
 	}
 
 	@Override
