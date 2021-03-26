@@ -110,7 +110,7 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("Lobby view detect change");
+		System.out.println("LobbyViewModel [propertyChange()] > \t" + evt.getPropertyName() + " changed to " + evt.getNewValue());
 		switch (evt.getPropertyName()) {
 			case "gameRoomAdd" -> {
 				System.out.println("LobbyViewModel > " + evt);

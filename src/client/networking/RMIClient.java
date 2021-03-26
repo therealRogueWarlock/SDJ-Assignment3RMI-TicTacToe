@@ -80,7 +80,9 @@ public class RMIClient implements Client, ClientCallback {
 
     @Override
     public void placePiece(TicTacToePiece ticTacToePiece) {
-
+        try{ticTacToeGameServer.placePiece(ticTacToePiece);}catch (RemoteException e){
+            System.out.println("Error > " + e.getMessage());
+        }
     }
 
     @Override

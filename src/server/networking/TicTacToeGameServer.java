@@ -8,6 +8,8 @@ import shared.networking.RMIServer;
 import shared.transferobjects.GameData;
 import shared.transferobjects.Message;
 import shared.transferobjects.ServerData;
+import shared.transferobjects.TicTacToePiece;
+import shared.util.GameRoomModel;
 import shared.util.Util;
 
 import java.beans.PropertyChangeEvent;
@@ -49,14 +51,15 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         gameRoom.addListener("resultMessage", this);
         gameRoom.addListener("gameRoomDel", this);
         gameRoom.addListener("gameRoomAdd", this);
-        gameRoom.iChanged("gameRoomAdd", gameRoom.getRoomId());                                                    // FIXME: Ville dette sende op, med at der er krearet et nyt gameroom?
+        gameRoom.addListener("messageAddedGameRoom", this);
+        gameRoom.iChanged("gameRoomAdd", gameRoom.getRoomId());
 
         PropertyChangeListener listener = new PropertyChangeListener() {                                                // FIXME: Sander, Klienten skal have at vide, at der er oprettet et nyt rum
             @Override
             public void propertyChange(PropertyChangeEvent evt) {                                                       // FIXME: Den får intet evt??
                 try {
-                    System.out.print("TicTacToeGameServer (line 57) > \t");
-                    System.out.println(evt);                                                                            // FIXME: evt = "turnSwitch", oldValue = null, newValue = null (???)
+                    System.out.println("TicTacToeGameServer [host()] > \t");
+                    System.out.println("\tProperty: " + evt.getPropertyName() + "\n\tValue: " + evt.getNewValue());     // FIXME: evt = "turnSwitch", oldValue = null, newValue = null (???)
                     clientCallback.updated(evt);                                                                        // FIXME: Hvad er evt?
                 } catch (RemoteException e) {
                     serverLobbyModel.removeListener("updated", this);
@@ -109,8 +112,6 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     public void registerListener(ClientCallback clientCallback) {
         clientCallbacks.add(clientCallback);
 
-
-
         /* idk
         support.addPropertyChangeListener("updated", new PropertyChangeListener() {
 
@@ -132,6 +133,13 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     }
 
     @Override
+    public boolean placePiece(TicTacToePiece piece) {
+//        System.out.println("TicTacToeGameServer > \t" + "TODO: Skal vide hvilket game, den skal sende brikken til");    //TODO: Implementer et system, hvor serveren ved, hvilket game den skal sende et piece til
+        GameRoomModel gameRoom = serverLobbyModel.getGameRooms().get(0);                                                //FIXME: Currently doing it purely on the first game in the list
+        return gameRoom.placePiece(piece);
+    }
+
+    @Override
     public void removeListener(ClientCallback client) {
         System.out.println("Client: " + client + " has disconnected...");
         clientCallbacks.remove(client);
@@ -140,16 +148,16 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("TicTacToeGameServer (line 145) > \t{");
+//        System.out.println("TicTacToeGameServer [propertyChange()] > \t{");
 
         for (ClientCallback client : clientCallbacks) {
             try {
-                System.out.println(evt);
+//                System.out.println(evt);
                 client.updated(evt);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println("\t}");
+//        System.out.println("\t}");
     }
 }

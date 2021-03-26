@@ -9,7 +9,7 @@ public interface GameRoomModel extends Subject {
 
 	void join(PropertyChangeListener listener, String playerName);
 
-	void placePiece(TicTacToePiece ticTacToePiece);
+	boolean placePiece(TicTacToePiece ticTacToePiece);
 
 	void sendMessage(Message message);
 

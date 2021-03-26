@@ -2,7 +2,6 @@ package client.model.gameroommodel;
 
 import client.networking.Client;
 import shared.transferobjects.Message;
-import shared.transferobjects.Request;
 import shared.transferobjects.TicTacToePiece;
 import shared.util.GameRoomModel;
 
@@ -33,10 +32,11 @@ public class ClientGameRoomModel implements GameRoomModel, PropertyChangeListene
 	}
 
 	@Override
-	public void placePiece(TicTacToePiece ticTacToePiece) {
+	public boolean placePiece(TicTacToePiece ticTacToePiece) {
 		System.out.println("game room model ask client to send request");
 		ticTacToePiece.setPiece(client.getName());
 		client.placePiece(ticTacToePiece);
+		return false;
 	}
 
 	@Override

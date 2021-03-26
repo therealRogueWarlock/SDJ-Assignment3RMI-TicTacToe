@@ -4,6 +4,7 @@ import client.networking.RMIClient;
 import server.model.lobbymodel.ServerLobbyModel;
 import shared.transferobjects.Message;
 import shared.transferobjects.ServerData;
+import shared.transferobjects.TicTacToePiece;
 
 import java.beans.PropertyChangeListener;
 import java.rmi.AlreadyBoundException;
@@ -32,4 +33,6 @@ public interface RMIServer extends Remote {
     ServerLobbyModel getServerLobbyModel() throws RemoteException;
 
     void removeListener(ClientCallback client) throws RemoteException;
+
+    boolean placePiece(TicTacToePiece piece) throws RemoteException;
 }

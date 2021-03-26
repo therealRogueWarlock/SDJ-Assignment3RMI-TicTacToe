@@ -11,120 +11,126 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
 public class ServerGameRoomModel implements GameRoomModel, Serializable {
-	private TicTacToe ticTacToe;
-	private ChatRoom chatRoom;
-	private int gameRoomId;
-	private String[] players = new String[2];
-	private PropertyChangeSupport support;;
+    private TicTacToe ticTacToe;
+    private ChatRoom chatRoom;
+    private int gameRoomId;
+    private String[] players = new String[2];
+    private PropertyChangeSupport support;
+    ;
 
-	public ServerGameRoomModel() {
-		support = new PropertyChangeSupport(this);
-		ticTacToe = new TicTacToe();
-		chatRoom = new ChatRoom();
-	}
-
-
-	public void join(PropertyChangeListener listener, String playerName){
-
-		this.addPlayerInfo(playerName);
-
-		System.out.println("ServerGameRoomModel (line 31) > \tAdding " + listener + " to gameroom with id " + gameRoomId);
-
-		this.addListener("piecePlaced", listener);
-		this.addListener("win", listener);
-		this.addListener("draw", listener);
-		this.addListener("turnSwitch", listener);
-		this.addListener("messageAdded", listener);
-		this.addListener("gameRoomDel", listener);
-
-		this.iChanged("turnSwitch", null);
-	}
+    public ServerGameRoomModel() {
+        support = new PropertyChangeSupport(this);
+        ticTacToe = new TicTacToe();
+        chatRoom = new ChatRoom();
+    }
 
 
-	public void addPlayerInfo(String playerName) {
-		if (players[0] == null) {
-			players[0] = playerName;
-		} else if (players[1] == null) {
-			players[1] = playerName;
-		}
-	}
+    public void join(PropertyChangeListener listener, String playerName) {
 
-	public void addId(int gameRoomId) {
-		this.gameRoomId = gameRoomId;
-	}
+        this.addPlayerInfo(playerName);
 
-	public void addMessage(Message message) {
-		chatRoom.addMessage(message);
-		iChanged("messageAdded", message);
-	}
+        System.out.println("ServerGameRoomModel (line 31) > \tAdding " + listener + " to gameroom with id " + gameRoomId);
 
+        this.addListener("piecePlaced", listener);
+        this.addListener("win", listener);
+        this.addListener("draw", listener);
+        this.addListener("turnSwitch", listener);
+        this.addListener("messageAdded", listener);
+        this.addListener("gameRoomDel", listener);
 
-	@Override
-	public void placePiece(TicTacToePiece ticTacToePiece) {
-		System.out.println(ticTacToePiece.getPiece());
-		if (ticTacToe.placePiece(ticTacToePiece)) {
-			iChanged("piecePlaced", ticTacToePiece);
-		}
-
-		if (ticTacToe.checkForWin(ticTacToePiece.getPiece())) {
-			String winnerName = ticTacToePiece.getPiece();
-
-			iChanged("win", ticTacToePiece.getPiece());
-
-			iChanged("gameRoomDel", gameRoomId); 																	// FIXME: Skal dette ikke ske som det aller sidste?
-
-			Message newMessage = new Message(getPlayerNames() + " : "+ winnerName + " Won!" );
-			newMessage.setName("Lobby");
-			iChanged("resultMessage", newMessage);
+        this.iChanged("turnSwitch", null);
+    }
 
 
-		} else if (ticTacToe.checkDraw()) {
-			iChanged("draw", null);
+    public void addPlayerInfo(String playerName) {
+        if (players[0] == null) {
+            players[0] = playerName;
+        } else if (players[1] == null) {
+            players[1] = playerName;
+        }
+    }
 
-			iChanged("gameRoomDel", gameRoomId);
+    public void addId(int gameRoomId) {
+        this.gameRoomId = gameRoomId;
+    }
+
+    /**
+     * @param message Message from user
+     * @implNote fires a PropertyChange "messageAddedGameRoom"
+     */
+    public void addMessage(Message message) {
+        chatRoom.addMessage(message);
+        iChanged("messageAddedGameRoom", message);
+    }
 
 
-		}
-		iChanged("turnSwitch", null);
-	}
+    @Override
+    public boolean placePiece(TicTacToePiece ticTacToePiece) {
+        System.out.println(ticTacToePiece.getPiece());
+        if (ticTacToe.placePiece(ticTacToePiece)) {
+            iChanged("piecePlaced", ticTacToePiece);
+        }
 
-	@Override
-	public int getRoomId() {
-		return gameRoomId;
-	}
+        if (ticTacToe.checkForWin(ticTacToePiece.getPiece())) {
+            String winnerName = ticTacToePiece.getPiece();
 
-	@Override
-	public String getPlayerCount() {
-		return null;
-	}
+            iChanged("win", ticTacToePiece.getPiece());
 
-	@Override
-	public String getPlayerNames() {
-		return players[0] + " vs " + players[1];
-	}
+            iChanged("gameRoomDel", gameRoomId);                                                                    // FIXME: Skal dette ikke ske som det aller sidste?
 
-	@Override
-	public void sendMessage(Message message) {
-		chatRoom.addMessage(message);
-	}
+            Message newMessage = new Message(getPlayerNames() + " : " + winnerName + " Won!");
+            newMessage.setName("Lobby");
+            iChanged("resultMessage", newMessage);
 
-	@Override
-	public void addListener(String propertyName, PropertyChangeListener listener) {
-		support.addPropertyChangeListener(propertyName, listener);
-	}
 
-	@Override
-	public void addListener(PropertyChangeListener listener) {
-		support.addPropertyChangeListener(listener);
-	}
+        } else if (ticTacToe.checkDraw()) {
+            iChanged("draw", null);
 
-	@Override
-	public void removeListener(String propertyName, PropertyChangeListener listener) {
-		support.removePropertyChangeListener(propertyName, listener);
-	}
+            iChanged("gameRoomDel", gameRoomId);
 
-	public void iChanged(String type, Object newValue) {
-		support.firePropertyChange(type, null, newValue);
-	}
+
+        }
+        iChanged("turnSwitch", null);
+        return false;
+    }
+
+    @Override
+    public int getRoomId() {
+        return gameRoomId;
+    }
+
+    @Override
+    public String getPlayerCount() {
+        return null;
+    }
+
+    @Override
+    public String getPlayerNames() {
+        return players[0] + " vs " + players[1];
+    }
+
+    @Override
+    public void sendMessage(Message message) {
+        chatRoom.addMessage(message);
+    }
+
+    @Override
+    public void addListener(String propertyName, PropertyChangeListener listener) {
+        support.addPropertyChangeListener(propertyName, listener);
+    }
+
+    @Override
+    public void addListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void removeListener(String propertyName, PropertyChangeListener listener) {
+        support.removePropertyChangeListener(propertyName, listener);
+    }
+
+    public void iChanged(String type, Object newValue) {
+        support.firePropertyChange(type, null, newValue);
+    }
 
 }
