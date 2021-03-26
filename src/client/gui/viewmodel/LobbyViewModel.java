@@ -112,7 +112,10 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		System.out.println("Lobby view detect change");
 		switch (evt.getPropertyName()) {
-			case "gameRoomAdd" -> Platform.runLater(() -> observableGameRooms.add(new GameTableRow((GameData) ((Request) evt.getNewValue()).getArg())));
+			case "gameRoomAdd" -> {
+				System.out.println("LobbyViewModel > " + evt);
+				Platform.runLater(() -> observableGameRooms.add(new GameTableRow(new GameData((Integer) evt.getNewValue(), null))));
+			}
 
 			case "gameRoomDel" -> Platform.runLater(() -> {
 				System.out.println("LobbyViewModel, get delete room event");

@@ -18,7 +18,7 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 	private PropertyChangeSupport support;;
 
 	public ServerGameRoomModel() {
-		this.support = new PropertyChangeSupport(this);
+		support = new PropertyChangeSupport(this);
 		ticTacToe = new TicTacToe();
 		chatRoom = new ChatRoom();
 	}
@@ -28,7 +28,7 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 
 		this.addPlayerInfo(playerName);
 
-		System.out.println("Adding " + listener + " to " + gameRoomId + " " + this);
+		System.out.println("ServerGameRoomModel (line 31) > \tAdding " + listener + " to gameroom with id " + gameRoomId);
 
 		this.addListener("piecePlaced", listener);
 		this.addListener("win", listener);
@@ -71,7 +71,7 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 
 			iChanged("win", ticTacToePiece.getPiece());
 
-			iChanged("gameRoomDel", gameRoomId);
+			iChanged("gameRoomDel", gameRoomId); 																	// FIXME: Skal dette ikke ske som det aller sidste?
 
 			Message newMessage = new Message(getPlayerNames() + " : "+ winnerName + " Won!" );
 			newMessage.setName("Lobby");

@@ -44,7 +44,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 	}
 
 	public void removePlayer(String name) {
-		playerList.removePlayer(0); // FIXME: Hvordan skal vi kunne fjerne en spiller fra en lobby? (Tror måske det allerede er fikset, men er ikke sikker)
+		playerList.removePlayer(0); 																				// FIXME: Hvordan skal vi kunne fjerne en spiller fra en lobby? (Tror måske det allerede er fikset, men er ikke sikker)
 	}
 
 	public ArrayList<Message> getAllMessages() {

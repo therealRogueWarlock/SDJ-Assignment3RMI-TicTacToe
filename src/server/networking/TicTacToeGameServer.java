@@ -48,14 +48,15 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
         gameRoom.addListener("resultMessage", this);
         gameRoom.addListener("gameRoomDel", this);
-
+        gameRoom.addListener("gameRoomAdd", this);
+        gameRoom.iChanged("gameRoomAdd", gameRoom.getRoomId());                                                    // FIXME: Ville dette sende op, med at der er krearet et nyt gameroom?
 
         PropertyChangeListener listener = new PropertyChangeListener() {                                                // FIXME: Sander, Klienten skal have at vide, at der er oprettet et nyt rum
             @Override
             public void propertyChange(PropertyChangeEvent evt) {                                                       // FIXME: Den får intet evt??
                 try {
-                    System.out.println("TicTacToeGameServer (line 57)...");
-                System.out.println(evt);                                                                                // FIXME: evt = "turnSwitch", oldValue = null, newValue = null (???)
+                    System.out.print("TicTacToeGameServer (line 57) > \t");
+                    System.out.println(evt);                                                                            // FIXME: evt = "turnSwitch", oldValue = null, newValue = null (???)
                     clientCallback.updated(evt);                                                                        // FIXME: Hvad er evt?
                 } catch (RemoteException e) {
                     serverLobbyModel.removeListener("updated", this);
@@ -110,7 +111,7 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
 
 
-        /*
+        /* idk
         support.addPropertyChangeListener("updated", new PropertyChangeListener() {
 
             @Override
@@ -139,14 +140,16 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("TicTacToeGameServer (line 145)...");
+        System.out.println("TicTacToeGameServer (line 145) > \t{");
 
         for (ClientCallback client : clientCallbacks) {
             try {
+                System.out.println(evt);
                 client.updated(evt);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("\t}");
     }
 }
