@@ -29,7 +29,6 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
     public boolean join(PropertyChangeListener listener, String playerName) {
 
         if (addPlayerInfo(playerName)) {
-            System.out.println("ServerGameRoomModel (line 31) > \tAdding " + listener + " to gameroom with id " + gameRoomId);
 
             addListener("piecePlaced", listener);
             addListener("win", listener);
@@ -75,7 +74,6 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 
     @Override
     public boolean placePiece(TicTacToePiece ticTacToePiece) {
-        System.out.println(ticTacToePiece.getPiece());
         if (ticTacToe.placePiece(ticTacToePiece)) {
             iChanged("piecePlaced", ticTacToePiece);
         }

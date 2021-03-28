@@ -73,12 +73,10 @@ public class GameRoomViewModel implements ViewModel, Subject {
     }
 
     public void placePiece(int x, int y) {
-        System.out.println("ViewModel: send placePiece to GameRoomModel client");
         clientGameRoomModel.placePiece(new TicTacToePiece(x, y, roomId));
     }
 
     public void updateGameBoard(int x, int y, String symbol) {
-        System.out.println("Updating game board");
 
         Platform.runLater(() -> slots.get(convert2dTo1d(x, y)).setValue(String.valueOf(symbol)));
     }
@@ -87,7 +85,6 @@ public class GameRoomViewModel implements ViewModel, Subject {
         Message newMessage = new Message(txtMessage.getValue());
         newMessage.setTarget("GameRoom");
         newMessage.setTargetRoomId(roomId);
-        System.out.println("Send Message to" + roomId);
         clientGameRoomModel.sendMessage(newMessage);
     }
 
@@ -131,7 +128,6 @@ public class GameRoomViewModel implements ViewModel, Subject {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("GameRoomViewModel [propertyChange()] > \t Test Spot");
         String eventType = evt.getPropertyName();
 
         switch (eventType) {
@@ -158,7 +154,6 @@ public class GameRoomViewModel implements ViewModel, Subject {
             }
             case "turnSwitch" -> turnSwitcher.setValue(!turnSwitcher.getValue());
             case "messageAddedGameRoom" -> {
-                System.out.println("gameRoom detected incoming message");
                 Message message = (Message) evt.getNewValue();
                 String senderName = message.getName();
                 String txtMessage = message.getStringMessage();
@@ -166,7 +161,6 @@ public class GameRoomViewModel implements ViewModel, Subject {
             }
             case "gameInfoUpdate" -> {
                 GameData gameData = (GameData) evt.getNewValue();
-                System.out.println("GameRoomViewModel [propertyChange()] > \t" + ((GameData)evt.getNewValue()).getId());
                 roomId = gameData.getId();
                 String roomId = String.valueOf(gameData.getId());
                 String players = gameData.getPlayers();

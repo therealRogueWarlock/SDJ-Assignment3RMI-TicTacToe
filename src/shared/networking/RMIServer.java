@@ -1,6 +1,5 @@
 package shared.networking;
 
-import client.networking.RMIClient;
 import server.model.lobbymodel.ServerLobbyModel;
 import shared.transferobjects.Message;
 import shared.transferobjects.ServerData;

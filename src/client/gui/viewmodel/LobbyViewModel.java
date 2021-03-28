@@ -81,7 +81,6 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 		Platform.runLater(()-> {
 			lobbyChatMessages.clear();
 			for (Message message: lobbyChat) {
-				System.out.println(message);
 				lobbyChatMessages.add(message.toString());
 			}
 			observableGameRooms.clear();
@@ -113,20 +112,16 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		//System.out.println("LobbyViewModel [propertyChange()] > \t" + evt.getPropertyName() + " changed to " + evt.getNewValue());
 		switch (evt.getPropertyName()) {
 			case "gameRoomAdd" -> {
-				//System.out.println("LobbyViewModel > " + evt);
 				Platform.runLater(() -> observableGameRooms.add(new GameTableRow((GameData) evt.getNewValue())));
 			}
 
 			case "gameRoomDel" -> Platform.runLater(() -> {
-				//System.out.println("LobbyViewModel, get delete room event");
 				observableGameRooms.removeIf(row -> row.getId() == (int) evt.getNewValue());
 			});
 
 			case "messageAddedLobby" -> {
-				//System.out.println("lobbyViewModel detected incoming message");
 				Message message = (Message) evt.getNewValue();
 				String senderName = message.getName();
 				String txtMessage = message.getStringMessage();

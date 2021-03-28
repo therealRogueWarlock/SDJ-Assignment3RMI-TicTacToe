@@ -32,15 +32,12 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 
 
     public void addMessage(Message message) {
-//		//System.out.println("Add message to lobby " + message.getName() + " " + message.getStringMessage());
         if (message.getTarget().equals("GameRoom")) {
             gameRooms.get(message.getTargetRoomId()).addMessage(message); /* Function fires PropertyChange automatically */
         } else {
-            //System.out.println("ServerLobbyModel [addMessage()] > \t Attempting to send message to lobby from " + message.getName());
             chatRoom.addMessage(message); /* Does not fire a PropertyChange */
             iChanged("messageAddedLobby", message);
         }
-//		//System.out.println(getAllMessages().toString());
     }
 
     public void addPlayer(String name) {
@@ -48,7 +45,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
     }
 
     public void removePlayer(String name) {
-        playerList.removePlayer(0);                                                                                // FIXME: Hvordan skal vi kunne fjerne en spiller fra en lobby? (Tror måske det allerede er fikset, men er ikke sikker)
+        playerList.removePlayer(0); // FIXME: Fjernes?
     }
 
     public ArrayList<Message> getAllMessages() {
@@ -84,9 +81,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
     }
 
     private void removeGameRoomById(int id) {
-        System.out.println("ServerLobbyModel [removeGameRoomById()] > \t" + gameRooms);
         gameRooms.removeIf(gameRoom -> gameRoom.getRoomId() == id);
-        System.out.println("ServerLobbyModel [removeGameRoomById()] > \t" + gameRooms);
         iChanged("gameRoomDel", id);
     }
 
@@ -142,7 +137,6 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
     }
 
     private void iChanged(String eventType, Object newValue) {
-//		//System.out.println("ServerLobbyModel detected a change. Firing Change");
         support.firePropertyChange(eventType, null, newValue);
     }
 

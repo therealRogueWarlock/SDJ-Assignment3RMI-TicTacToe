@@ -35,7 +35,6 @@ public class ClientGameRoomModel implements GameRoomModel, PropertyChangeListene
 
 	@Override
 	public boolean placePiece(TicTacToePiece ticTacToePiece) {
-		System.out.println("game room model ask client to send request");
 		ticTacToePiece.setPiece(client.getName());
 		client.placePiece(ticTacToePiece);
 		return false;
@@ -68,7 +67,6 @@ public class ClientGameRoomModel implements GameRoomModel, PropertyChangeListene
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("game room model recieved evet: " + evt.getPropertyName());
 		support.firePropertyChange(evt);
 	}
 

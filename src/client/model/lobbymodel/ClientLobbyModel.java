@@ -67,7 +67,6 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		//System.out.println("ClientLobby Model detect change" + evt.getPropertyName());
 		support.firePropertyChange(evt);
 	}
 }

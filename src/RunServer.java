@@ -1,11 +1,8 @@
-import server.model.ServerModelTester;
 import server.networking.TicTacToeGameServer;
 import shared.networking.RMIServer;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 
 public class RunServer {
 
@@ -14,10 +11,6 @@ public class RunServer {
         RMIServer ticTacToeGameServer = new TicTacToeGameServer();
 
         ticTacToeGameServer.startServer();
-
-
-        /*ServerModelTester serverModelTester = new ServerModelTester(ticTacToeGameServer.getServerLobbyModel());
-        serverModelTester.start();*/
     }
 
 }

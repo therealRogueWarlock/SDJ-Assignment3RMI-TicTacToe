@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     private ServerLobbyModel serverLobbyModel;
-    private ArrayList<ClientCallback> clientCallbacks;                                                                  // FIXME: HashMap så man kan gemme et id. Ville kunne bruges til at identificere fra et gameroom
+    private ArrayList<ClientCallback> clientCallbacks;
 
     @Override
     public void startServer() throws RemoteException, AlreadyBoundException {
@@ -35,7 +35,6 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         serverLobbyModel = new ServerLobbyModel();
         clientCallbacks = new ArrayList<>();
         serverLobbyModel.addListener(this);
-
     }
 
     @Override
@@ -50,13 +49,10 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         gameRoom.addListener("resultMessage", serverLobbyModel);
         gameRoom.addListener("gameRoomDel", serverLobbyModel);
 
-        //gameRoom.addListener("messageAddedGameRoom", this);
         PropertyChangeListener listener = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 try {
-//                    System.out.println("TicTacToeGameServer [host()] > \t");
-//                    System.out.println("\tProperty: " + evt.getPropertyName() + "\n\tValue: " + evt.getNewValue());
                     clientCallback.updated(evt);
                 } catch (RemoteException e) {
                     serverLobbyModel.removeListener(this);
@@ -65,7 +61,6 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         };
 
         if (gameRoom.join(listener, playerName)) {
-//            System.out.println(playerName + " hosted and joined" + "Room: "+ gameRoom.getRoomId());
             GameData newGameRoomData = new GameData(gameRoom.getRoomId(), gameRoom.getPlayerNames());
             propertyChange(
                     new PropertyChangeEvent(
@@ -73,14 +68,12 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
             return true;
         }
         return false;
-
     }
 
     @Override
     public synchronized boolean joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) {
 
         PropertyChangeListener listener = new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 try {
@@ -100,7 +93,6 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         return false;
     }
 
-
     @Override
     public void addMessage(Message message) {
         serverLobbyModel.addMessage(message);
@@ -108,7 +100,6 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     @Override
     public void broadcast(PropertyChangeEvent evt) {
-
         new Thread(() -> {
             for (ClientCallback client : clientCallbacks) {
                 try {
@@ -120,7 +111,6 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         }
         ).start();
     }
-
 
     @Override
     public ServerData getServerDate() {
@@ -135,20 +125,6 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     public void registerListener(ClientCallback clientCallback) {
         clientCallbacks.add(clientCallback);
-
-        /* idk
-        support.addPropertyChangeListener("updated", new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                try {
-                    listener.updated();
-                } catch (RemoteException e) {
-                    serverLobbyModel.removeListener("updated", this);
-                }
-
-            }
-        });*/
     }
 
     @Override
@@ -158,17 +134,15 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     @Override
     public boolean placePiece(TicTacToePiece piece) {
-        //System.out.println("TicTacToeGameServer > \t" + piece.getTargetGameRoom());
         GameRoomModel gameRoom = serverLobbyModel.getGameRooms().get(piece.getTargetGameRoom());
         return gameRoom.placePiece(piece);
     }
 
     @Override
     public void removeListener(ClientCallback client) {
-        System.out.println("Client: " + client + " has disconnected...");
+        System.out.println("A Client has Disconnected");
         clientCallbacks.remove(client);
     }
-
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

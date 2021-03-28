@@ -22,100 +22,95 @@ import java.io.IOException;
 
 public class GameRoomViewController implements ViewController, PropertyChangeListener {
 
-	@FXML private Label gameRoomInfoLabelId;
-	@FXML private GridPane gameBoard;
-	@FXML private Label gameInfo;
-	@FXML private ListView chatGameRoom;
-	@FXML private TextField textToSendGameRoom;
+    @FXML private Label gameRoomInfoLabelId;
+    @FXML private GridPane gameBoard;
+    @FXML private Label gameInfo;
+    @FXML private ListView chatGameRoom;
+    @FXML private TextField textToSendGameRoom;
 
-	private ViewHandler viewHandler;
-	private GameRoomViewModel gameRoomViewModel;
-	private BooleanProperty myTurn;
+    private ViewHandler viewHandler;
+    private GameRoomViewModel gameRoomViewModel;
+    private BooleanProperty myTurn;
 
-	@Override
-	public void init(ViewHandler viewHandler, ViewModel model) {
-		//TODO: reset viewModel.
+    @Override
+    public void init(ViewHandler viewHandler, ViewModel model) {
+        this.viewHandler = viewHandler;
+        gameRoomViewModel = (GameRoomViewModel) model;
+        gameRoomViewModel.resetRoom();
 
-		this.viewHandler = viewHandler;
-		gameRoomViewModel = (GameRoomViewModel) model;
-		gameRoomViewModel.resetRoom();
+        myTurn = new SimpleBooleanProperty();
 
-		myTurn = new SimpleBooleanProperty();
+        myTurn.bind(gameRoomViewModel.turnSwitcherProperty());
 
-		myTurn.bind(gameRoomViewModel.turnSwitcherProperty());
+        int index = 0;
+        for (Node button : gameBoard.getChildren()) {
+            if (button instanceof Button) {
+                ((Button) button).textProperty().bind(gameRoomViewModel.getSlots().get(index));
+                button.disableProperty().bind(gameRoomViewModel.turnSwitcherProperty());
+            }
+            index++;
+        }
 
-		int index = 0;
-		for (Node button : gameBoard.getChildren()) {
-			if (button instanceof Button) {
-				((Button) button).textProperty().bind(gameRoomViewModel.getSlots().get(index));
-				button.disableProperty().bind(gameRoomViewModel.turnSwitcherProperty());
-			}
-			index++;
-		}
+        gameInfo.textProperty().bind(gameRoomViewModel.winLabelProperty());
+        gameInfo.disableProperty().bind(gameRoomViewModel.winLabelDisabledProperty());
 
-		gameInfo.textProperty().bind(gameRoomViewModel.winLabelProperty());
-		gameInfo.disableProperty().bind(gameRoomViewModel.winLabelDisabledProperty());
+        gameRoomInfoLabelId.textProperty().bind(gameRoomViewModel.gameRoomInfoProperty());
 
-		gameRoomInfoLabelId.textProperty().bind(gameRoomViewModel.gameRoomInfoProperty());
+        gameRoomViewModel.txtMessageProperty().bind(textToSendGameRoom.textProperty());
 
-		gameRoomViewModel.txtMessageProperty().bind(textToSendGameRoom.textProperty());
+        this.gameRoomViewModel.addListener("ViewChange", this);
 
-		this.gameRoomViewModel.addListener("ViewChange", this);
+        chatGameRoom.setItems(gameRoomViewModel.getGameRoomChatMessages());
+    }
 
-		chatGameRoom.setItems(gameRoomViewModel.getGameRoomChatMessages());
-	}
+    public void placePiece(MouseEvent mouseEvent) {
+        try {
+            Node button = mouseEvent.getPickResult().getIntersectedNode();
+            if (button instanceof Button) {
 
-	public void placePiece(MouseEvent mouseEvent) {
-		try {
-			Node button = mouseEvent.getPickResult().getIntersectedNode();
-			if (button instanceof Button) {
+                int col = GridPane.getColumnIndex(button);
+                int row = GridPane.getRowIndex(button);
 
-				int col = GridPane.getColumnIndex(button);
-				int row = GridPane.getRowIndex(button);
+                gameRoomViewModel.placePiece(col, row);
 
-				gameRoomViewModel.placePiece(col, row);
+            } else {
+                // Button was not pressed
+            }
 
-			} else {
-				System.out.println("Didn't click on the button");
-			}
+        } catch (RuntimeException runtimeException) {
+            runtimeException.printStackTrace();
+        }
+    }
 
-		} catch (RuntimeException runtimeException) {
-			runtimeException.printStackTrace();
-		}
-	}
+    public void sendTextGameButton() {
+        if (!textToSendGameRoom.getText().isEmpty()) {
+            gameRoomViewModel.sendMessage();
+            textToSendGameRoom.clear();
+        }
+    }
 
-	public void sendTextGameButton() {
-		if (!textToSendGameRoom.getText().isEmpty()) {
-			gameRoomViewModel.sendMessage();
-			textToSendGameRoom.clear();
-		}
-	}
+    @Override
+    public void swapScene(String scene) throws IOException {
+        viewHandler.openView(scene);
+    }
 
-	@Override
-	public void swapScene(String scene) throws IOException {
-		// TODO: Hvis et spil slutter, så skal denne sende en tilbage til lobby view
-		viewHandler.openView(scene);
-		// FIXME: Ser gerne, vi kan få vores scene givet når et spil er slut, fremfor at hardcode en scene at gå til
-
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("ViewChange")) {
-			new Thread(() -> {
-				try {
-					Thread.sleep(5000);
-					Platform.runLater(() -> {
-						try {
-							viewHandler.openView((String) evt.getNewValue());
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					});
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}).start();
-		}
-	}
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("ViewChange")) {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> {
+                        try {
+                            viewHandler.openView((String) evt.getNewValue());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
 }

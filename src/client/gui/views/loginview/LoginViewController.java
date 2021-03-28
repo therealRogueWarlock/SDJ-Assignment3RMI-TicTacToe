@@ -12,35 +12,31 @@ import java.io.IOException;
 
 public class LoginViewController implements ViewController {
 
-	public Label error;
-	@FXML private TextField gamerTagLabel;
-	private LoginViewModel loginViewModel;
-	private ViewHandler viewHandler;
+    @FXML private TextField gamerTagLabel;
+    private LoginViewModel loginViewModel;
+    private ViewHandler viewHandler;
 
-	@Override
-	public void init(ViewHandler viewHandler, ViewModel model) {
-		this.viewHandler = viewHandler;
-		this.loginViewModel = (LoginViewModel) model;
+    @Override
+    public void init(ViewHandler viewHandler, ViewModel model) {
+        this.viewHandler = viewHandler;
+        this.loginViewModel = (LoginViewModel) model;
 
-		gamerTagLabel.textProperty().bindBidirectional(loginViewModel.nameProperty());
+        gamerTagLabel.textProperty().bindBidirectional(loginViewModel.nameProperty());
 
-	}
+    }
 
-	public void loginButton() {
+    public void loginButton() {
+        if (loginViewModel.tryLogin()) {
+            try {
+                swapScene("Lobby");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-		if (loginViewModel.tryLogin()) {
-			try {
-				swapScene("Lobby");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-
-	@Override
-	public void swapScene(String scene) throws IOException {
-		viewHandler.openView(scene);
-	}
-
+    @Override
+    public void swapScene(String scene) throws IOException {
+        viewHandler.openView(scene);
+    }
 }

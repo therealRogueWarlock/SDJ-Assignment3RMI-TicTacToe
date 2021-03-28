@@ -15,7 +15,5 @@ public class TicTacToeGameClient extends Application {
 		ViewHandler viewHandler = new ViewHandler(stage, viewModelFactory);
 
 		viewHandler.start();
-
 	}
-
 }

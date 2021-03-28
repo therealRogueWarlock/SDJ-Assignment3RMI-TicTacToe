@@ -33,7 +33,7 @@ public class RMIClient implements Client, ClientCallback {
             ticTacToeGameServer = (RMIServer) registry.lookup(Util.SERVERNAME);
             UnicastRemoteObject.exportObject(this, 0);
             ticTacToeGameServer.registerListener(this);
-            System.out.println("Client started connection to server");
+            System.out.println("Connecting to Server");
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
@@ -82,8 +82,7 @@ public class RMIClient implements Client, ClientCallback {
 
     @Override
     public void placePiece(TicTacToePiece ticTacToePiece) {
-        try{ticTacToeGameServer.placePiece(ticTacToePiece);}catch (RemoteException e){
-            System.out.println("Error > " + e.getMessage());
+        try{ticTacToeGameServer.placePiece(ticTacToePiece);}catch (RemoteException e){e.printStackTrace();
         }
     }
 
@@ -131,7 +130,6 @@ public class RMIClient implements Client, ClientCallback {
     }
 
     private void iChanged(PropertyChangeEvent event) {
-//        System.out.println("RMIClient [iChanged()]");
         support.firePropertyChange(event);
     }
 
