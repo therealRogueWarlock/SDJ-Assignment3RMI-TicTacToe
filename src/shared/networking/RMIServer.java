@@ -6,6 +6,7 @@ import shared.transferobjects.Message;
 import shared.transferobjects.ServerData;
 import shared.transferobjects.TicTacToePiece;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
@@ -22,11 +23,11 @@ public interface RMIServer extends Remote {
 
     void host(ClientCallback clientCallback, String playerName) throws RemoteException;
 
-    void joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) throws RemoteException;
+    boolean joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) throws RemoteException;
 
     void addMessage(Message message) throws RemoteException;
 
-    void broadcast() throws RemoteException;
+    void broadcast(PropertyChangeEvent evt) throws RemoteException;
 
     ServerData getServerDate() throws RemoteException;
 

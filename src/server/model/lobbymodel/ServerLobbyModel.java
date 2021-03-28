@@ -99,9 +99,10 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 
 
     @Override
-    public synchronized void join(PropertyChangeListener listener, int roomId, String playerName) {
+    public synchronized boolean join(PropertyChangeListener listener, int roomId, String playerName) {
         GameRoomModel gameRoom = getGameRoomById(roomId);
-        gameRoom.join(listener, playerName);
+
+        return gameRoom.join(listener, playerName);
     }
 
     @Override

@@ -51,12 +51,13 @@ public class RMIClient implements Client, ClientCallback {
     }
 
     @Override
-    public void joinGame(int roomId) {
+    public boolean joinGame(int roomId) {
         try {
-            ticTacToeGameServer.joinGameRoom(this, roomId, clientName);
+            return ticTacToeGameServer.joinGameRoom(this, roomId, clientName);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override
@@ -88,11 +89,6 @@ public class RMIClient implements Client, ClientCallback {
     @Override
     public void updated() {
 
-    }
-
-    @Override
-    public void updated(Object obj) throws RemoteException {
-        System.out.println(obj);
     }
 
     @Override

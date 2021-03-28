@@ -26,31 +26,37 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
     }
 
 
-    public void join(PropertyChangeListener listener, String playerName) {
+    public boolean join(PropertyChangeListener listener, String playerName) {
 
-        this.addPlayerInfo(playerName);
+        if (addPlayerInfo(playerName)) {
+            System.out.println("ServerGameRoomModel (line 31) > \tAdding " + listener + " to gameroom with id " + gameRoomId);
 
-        System.out.println("ServerGameRoomModel (line 31) > \tAdding " + listener + " to gameroom with id " + gameRoomId);
+            this.addListener("piecePlaced", listener);
+            this.addListener("win", listener);
+            this.addListener("draw", listener);
+            this.addListener("turnSwitch", listener);
+            this.addListener("messageAddedGameRoom", listener);
+            this.addListener("gameRoomDel", listener);
+            this.addListener("gameInfoUpdate", listener);
 
-        this.addListener("piecePlaced", listener);
-        this.addListener("win", listener);
-        this.addListener("draw", listener);
-        this.addListener("turnSwitch", listener);
-        this.addListener("messageAdded", listener);
-        this.addListener("gameRoomDel", listener);
-        this.addListener("gameInfoUpdate",listener);
+            this.iChanged("turnSwitch", null);
+            this.iChanged("gameInfoUpdate", new GameData(getRoomId(), getPlayerNames()));
 
-        this.iChanged("turnSwitch", null);
-        this.iChanged("gameInfoUpdate", new GameData(getRoomId(), getPlayerNames()));
+            return true;
+        }
+
+        return false;
     }
 
 
-    public void addPlayerInfo(String playerName) {
+    public boolean addPlayerInfo(String playerName) {
         if (players[0] == null) {
             players[0] = playerName;
         } else if (players[1] == null) {
             players[1] = playerName;
-        }
+        } else return false;
+
+        return true;
     }
 
     public void addId(int gameRoomId) {

@@ -62,7 +62,7 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
                     System.out.println("\tProperty: " + evt.getPropertyName() + "\n\tValue: " + evt.getNewValue());     // FIXME: evt = "turnSwitch", oldValue = null, newValue = null (???)
                     clientCallback.updated(evt);                                                                        // FIXME: Hvad er evt?
                 } catch (RemoteException e) {
-                    serverLobbyModel.removeListener("updated", this);
+                    serverLobbyModel.removeListener(this);
                 }
             }
         };
@@ -78,7 +78,7 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     }
 
     @Override
-    public synchronized void joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) {
+    public synchronized boolean joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) {
 
         PropertyChangeListener listener = new PropertyChangeListener() {
 
@@ -93,7 +93,12 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
             }
         };
 
-        serverLobbyModel.join(listener, roomId, playerName);
+        if (serverLobbyModel.join(listener, roomId, playerName)){
+            broadcast(new PropertyChangeEvent(this,"Update", null, getServerDate()));
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -102,15 +107,23 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     }
 
     @Override
-    public void broadcast() {
+    public void broadcast(PropertyChangeEvent evt) {
 
+        new Thread( () -> { for (ClientCallback client : clientCallbacks) {
+            try {
+                client.updated(evt);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        } }
+        ).start();
     }
 
     @Override
     public ServerData getServerDate() {
 
         ArrayList<Message> allLobbyMessages = serverLobbyModel.getAllMessages();
-        ServerData serverData = new ServerData("update", allLobbyMessages);
+        ServerData serverData = new ServerData("Update", allLobbyMessages);
         ArrayList<GameData> allDameRoomData = serverLobbyModel.getAllGameRoomData();
         serverData.setArg2(allDameRoomData);
 
@@ -156,16 +169,6 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-//        System.out.println("TicTacToeGameServer [propertyChange()] > \t{");
-
-        for (ClientCallback client : clientCallbacks) {
-            try {
-//                System.out.println(evt);
-                client.updated(evt);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-//        System.out.println("\t}");
+        broadcast(evt);
     }
 }

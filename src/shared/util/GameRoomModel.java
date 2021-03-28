@@ -7,7 +7,7 @@ import java.beans.PropertyChangeListener;
 
 public interface GameRoomModel extends Subject {
 
-	void join(PropertyChangeListener listener, String playerName);
+	boolean join(PropertyChangeListener listener, String playerName);
 
 	boolean placePiece(TicTacToePiece ticTacToePiece);
 

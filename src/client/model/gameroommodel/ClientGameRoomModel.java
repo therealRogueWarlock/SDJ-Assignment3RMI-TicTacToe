@@ -28,8 +28,9 @@ public class ClientGameRoomModel implements GameRoomModel, PropertyChangeListene
 	}
 
 	@Override
-	public void join(PropertyChangeListener listener, String playerName) {
+	public boolean join(PropertyChangeListener listener, String playerName) {
 		// only used on serverside.
+		return false;
 	}
 
 	@Override

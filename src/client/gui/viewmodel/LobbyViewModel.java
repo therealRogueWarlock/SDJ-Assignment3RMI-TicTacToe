@@ -59,16 +59,19 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 
 
 	public boolean join() {
-
 		try {
+
 			GameTableRow selectedItem = selectedGameRoom.getValue();
+
 			if (selectedItem != null){
-				clientLobbyModel.join(null, selectedItem.getId(),null);
-				return true;
+				return clientLobbyModel.join(null, selectedItem.getId(),null);
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+
 		return false;
 	}
 

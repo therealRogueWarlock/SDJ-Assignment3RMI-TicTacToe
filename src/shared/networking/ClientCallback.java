@@ -9,8 +9,6 @@ public interface ClientCallback extends Remote{
 
     void updated() throws RemoteException;
 
-    void updated(Object obj) throws RemoteException;
-
     void updated(PropertyChangeEvent evt) throws RemoteException;
 
 
