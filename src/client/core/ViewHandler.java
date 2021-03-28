@@ -14,7 +14,7 @@ public class ViewHandler {
 
 	private ViewModelFactory viewModelFactory;
 	private Stage stage;
-	private Scene scene;
+	private Scene loadedScene;
 
 	public ViewHandler(Stage stage, ViewModelFactory viewModelFactory) {
 		this.stage = stage;
@@ -53,11 +53,11 @@ public class ViewHandler {
 		ViewController viewController = loader.getController();
 		viewController.init(this, getViewModelByViewName(viewToOpen));
 
-		scene = new Scene(root);
+		loadedScene = new Scene(root);
 	}
 
 	public void swapToLoadedView(){
-		stage.setScene(scene);
+		stage.setScene(loadedScene);
 		stage.show();
 	}
 
