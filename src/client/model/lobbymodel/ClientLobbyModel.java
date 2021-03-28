@@ -37,7 +37,6 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 
 	@Override
 	public void sendMessage(Message message) {
-
 		client.sendMessage(message);
 	}
 
@@ -54,6 +53,11 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 	@Override
 	public void removeListener(String propertyName, PropertyChangeListener listener) {
 		support.removePropertyChangeListener(propertyName, listener);
+	}
+
+	@Override
+	public void removeListener(PropertyChangeListener listener) {
+		support.removePropertyChangeListener(listener);
 	}
 
 	public void quit(){

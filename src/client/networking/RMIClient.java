@@ -97,7 +97,7 @@ public class RMIClient implements Client, ClientCallback {
 
     @Override
     public void updated(PropertyChangeEvent evt) throws RemoteException {
-        support.firePropertyChange(evt);
+        iChanged(evt);
     }
 
 
@@ -126,6 +126,11 @@ public class RMIClient implements Client, ClientCallback {
     @Override
     public void removeListener(String propertyName, PropertyChangeListener listener) {
         support.removePropertyChangeListener(propertyName, listener);
+    }
+
+    @Override
+    public void removeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 
     private void iChanged(PropertyChangeEvent event) {

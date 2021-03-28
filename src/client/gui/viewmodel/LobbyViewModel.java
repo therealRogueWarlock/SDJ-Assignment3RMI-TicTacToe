@@ -67,7 +67,7 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 				return true;
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -114,12 +114,12 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 		switch (evt.getPropertyName()) {
 			case "gameRoomAdd" -> {
 				System.out.println("LobbyViewModel > " + evt);
-				Platform.runLater(() -> observableGameRooms.add(new GameTableRow(new GameData((Integer) evt.getNewValue(), null))));
+				Platform.runLater(() -> observableGameRooms.add(new GameTableRow((GameData) evt.getNewValue())));
 			}
 
 			case "gameRoomDel" -> Platform.runLater(() -> {
 				System.out.println("LobbyViewModel, get delete room event");
-				observableGameRooms.removeIf(row -> row.getId() == (int) ((Request)evt.getNewValue()).getArg());
+				observableGameRooms.removeIf(row -> row.getId() == (int) evt.getNewValue());
 			});
 
 			case "messageAddedLobby" -> {

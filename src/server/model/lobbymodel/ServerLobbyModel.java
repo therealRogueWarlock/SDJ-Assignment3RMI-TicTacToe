@@ -66,6 +66,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 
     public ArrayList<GameData> getAllGameRoomData() {
         ArrayList<GameData> allDameRoomData = new ArrayList<>();
+
         for (ServerGameRoomModel gameRoom : getGameRooms()) {
             allDameRoomData.add(new GameData(gameRoom.getRoomId(),
                     gameRoom.getPlayerNames()));
@@ -88,7 +89,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
         gameRooms.removeIf(gameRoom -> gameRoom.getRoomId() == id);
     }
 
-    public ServerGameRoomModel createGameRoom() {
+    public synchronized ServerGameRoomModel createGameRoom()  {
         ServerGameRoomModel gameRoom = new ServerGameRoomModel();
         gameRoom.addId(gameRoomsId);
         gameRooms.add(gameRoom);
@@ -98,11 +99,9 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 
 
     @Override
-    public void join(PropertyChangeListener listener, int roomId, String playerName) {
+    public synchronized void join(PropertyChangeListener listener, int roomId, String playerName) {
         GameRoomModel gameRoom = getGameRoomById(roomId);
-
         gameRoom.join(listener, playerName);
-
     }
 
     @Override
@@ -126,11 +125,18 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
     }
 
     @Override
+    public void removeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
+    }
+
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("resultMessage")) {
             addMessage((Message) evt.getNewValue());
         } else if (evt.getPropertyName().equals("gameRoomDel")) {
             removeGameRoomById((Integer) evt.getNewValue());
+        }else{
+            iChanged(evt.getPropertyName(), evt.getNewValue());
         }
 
     }

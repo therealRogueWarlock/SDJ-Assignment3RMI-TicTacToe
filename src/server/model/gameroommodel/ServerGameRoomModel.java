@@ -2,6 +2,7 @@ package server.model.gameroommodel;
 
 import server.model.chatmodel.ChatRoom;
 import server.model.gamemodel.TicTacToe;
+import shared.transferobjects.GameData;
 import shared.transferobjects.Message;
 import shared.transferobjects.TicTacToePiece;
 import shared.util.GameRoomModel;
@@ -37,8 +38,10 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
         this.addListener("turnSwitch", listener);
         this.addListener("messageAdded", listener);
         this.addListener("gameRoomDel", listener);
+        this.addListener("gameInfoUpdate",listener);
 
         this.iChanged("turnSwitch", null);
+        this.iChanged("gameInfoUpdate", new GameData(getRoomId(), getPlayerNames()));
     }
 
 
@@ -127,6 +130,11 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
     @Override
     public void removeListener(String propertyName, PropertyChangeListener listener) {
         support.removePropertyChangeListener(propertyName, listener);
+    }
+
+    @Override
+    public void removeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 
     public void iChanged(String type, Object newValue) {

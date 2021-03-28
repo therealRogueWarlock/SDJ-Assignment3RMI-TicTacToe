@@ -45,14 +45,14 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     }
 
     @Override
-    public void host(ClientCallback clientCallback, String playerName) {
+    public synchronized void host(ClientCallback clientCallback, String playerName) {
         ServerGameRoomModel gameRoom = serverLobbyModel.createGameRoom();
 
         gameRoom.addListener("resultMessage", this);
         gameRoom.addListener("gameRoomDel", this);
         gameRoom.addListener("gameRoomAdd", this);
-        gameRoom.addListener("messageAddedGameRoom", this);
-        gameRoom.iChanged("gameRoomAdd", gameRoom.getRoomId());
+        //gameRoom.addListener("messageAddedGameRoom", this);
+
 
         PropertyChangeListener listener = new PropertyChangeListener() {                                                // FIXME: Sander, Klienten skal have at vide, at der er oprettet et nyt rum
             @Override
@@ -66,11 +66,19 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
                 }
             }
         };
+
         gameRoom.join(listener, playerName);
+
+        GameData newGameRoomData =  new GameData(gameRoom.getRoomId(), gameRoom.getPlayerNames());
+
+        propertyChange(
+                new PropertyChangeEvent(
+                        this, "gameRoomAdd", null, newGameRoomData));
+
     }
 
     @Override
-    public void joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) {
+    public synchronized void joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) {
 
         PropertyChangeListener listener = new PropertyChangeListener() {
 
@@ -79,7 +87,7 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
                 try {
                     clientCallback.updated(evt);
                 } catch (RemoteException e) {
-                    serverLobbyModel.removeListener("updated", this);
+                    serverLobbyModel.removeListener(this);
                 }
 
             }
@@ -134,8 +142,8 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
 
     @Override
     public boolean placePiece(TicTacToePiece piece) {
-//        System.out.println("TicTacToeGameServer > \t" + "TODO: Skal vide hvilket game, den skal sende brikken til");    //TODO: Implementer et system, hvor serveren ved, hvilket game den skal sende et piece til
-        GameRoomModel gameRoom = serverLobbyModel.getGameRooms().get(0);                                                //FIXME: Currently doing it purely on the first game in the list
+        System.out.println("TicTacToeGameServer > \t" + piece.getTargetGameRoom());
+        GameRoomModel gameRoom = serverLobbyModel.getGameRooms().get(piece.getTargetGameRoom());
         return gameRoom.placePiece(piece);
     }
 

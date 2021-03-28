@@ -23,6 +23,7 @@ public class ClientGameRoomModel implements GameRoomModel, PropertyChangeListene
 		this.client.addListener("draw", this);
 		this.client.addListener("turnSwitch", this);
 		this.client.addListener("messageAddedGameRoom", this);
+		this.client.addListener("gameInfoUpdate",this);
 
 	}
 
@@ -57,6 +58,11 @@ public class ClientGameRoomModel implements GameRoomModel, PropertyChangeListene
 	@Override
 	public void removeListener(String propertyName, PropertyChangeListener listener) {
 		support.removePropertyChangeListener(propertyName, listener);
+	}
+
+	@Override
+	public void removeListener(PropertyChangeListener listener) {
+		support.removePropertyChangeListener(listener);
 	}
 
 	@Override

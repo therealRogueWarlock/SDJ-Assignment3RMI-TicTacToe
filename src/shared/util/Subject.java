@@ -8,5 +8,8 @@ public interface Subject {
 	void addListener(PropertyChangeListener listener);
 
 	void removeListener(String propertyName, PropertyChangeListener listener);
-}
+
+	void removeListener(PropertyChangeListener listener);
+
+	}
 

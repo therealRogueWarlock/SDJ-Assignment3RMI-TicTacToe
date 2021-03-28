@@ -5,10 +5,12 @@ import java.io.Serializable;
 public class TicTacToePiece implements Serializable {
 	int x, y;
 	String piece;
+	int roomIdTarget;
 
-	public TicTacToePiece(int x, int y) {
+	public TicTacToePiece(int x, int y, int roomIdTarget) {
 		this.x = x;
 		this.y = y;
+		this.roomIdTarget = roomIdTarget;
 	}
 
 	public void setPiece(String name) {
@@ -18,6 +20,10 @@ public class TicTacToePiece implements Serializable {
 
 	public String getPiece() {
 		return piece;
+	}
+
+	public int getTargetGameRoom(){
+		return roomIdTarget;
 	}
 
 	public int getX() {

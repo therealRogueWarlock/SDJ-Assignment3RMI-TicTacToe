@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import shared.transferobjects.GameData;
 import shared.transferobjects.Message;
 import shared.transferobjects.Request;
 import shared.transferobjects.TicTacToePiece;
@@ -22,12 +23,18 @@ import java.util.ArrayList;
 public class GameRoomViewModel implements ViewModel, Subject {
     private StringProperty txtMessage;
     private StringProperty winLabel;
+    private StringProperty gameRoomInfo;
+
     private BooleanProperty winLabelDisabled;
     private ClientGameRoomModel clientGameRoomModel;
     private ArrayList<StringProperty> slots;
     private BooleanProperty turnSwitcher;
     private ObservableList<String> gameRoomChatMessages;
     private PropertyChangeSupport support;
+
+    private int roomId;
+
+
 
     public GameRoomViewModel(GameRoomModel gameRoomModel) {
         this.clientGameRoomModel = (ClientGameRoomModel) gameRoomModel;
@@ -37,12 +44,16 @@ public class GameRoomViewModel implements ViewModel, Subject {
         this.clientGameRoomModel.addListener("draw", this);
         this.clientGameRoomModel.addListener("turnSwitch", this);
         this.clientGameRoomModel.addListener("messageAddedGameRoom", this);
+        this.clientGameRoomModel.addListener("gameInfoUpdate",this);
 
         resetRoom();
     }
 
     public void resetRoom() {
         txtMessage = new SimpleStringProperty();
+
+        gameRoomInfo = new SimpleStringProperty();
+
 
         turnSwitcher = new SimpleBooleanProperty();
         turnSwitcher.setValue(true);
@@ -59,12 +70,11 @@ public class GameRoomViewModel implements ViewModel, Subject {
         gameRoomChatMessages = FXCollections.observableArrayList();
 
         support = new PropertyChangeSupport(this);
-
     }
 
     public void placePiece(int x, int y) {
         System.out.println("ViewModel: send placePiece to GameRoomModel client");
-        clientGameRoomModel.placePiece(new TicTacToePiece(x, y));
+        clientGameRoomModel.placePiece(new TicTacToePiece(x, y, roomId));
     }
 
     public void updateGameBoard(int x, int y, String symbol) {
@@ -103,10 +113,13 @@ public class GameRoomViewModel implements ViewModel, Subject {
         return winLabel;
     }
 
+    public StringProperty gameRoomInfoProperty() {
+        return gameRoomInfo;
+    }
+
     public BooleanProperty turnSwitcherProperty() {
         return turnSwitcher;
     }
-
 
     public BooleanProperty winLabelDisabledProperty() {
         return winLabelDisabled;
@@ -118,15 +131,14 @@ public class GameRoomViewModel implements ViewModel, Subject {
 
         switch (eventType) {
             case "piecePlaced" -> {
-                Request eventRequestObject = (Request) evt.getNewValue();
-                TicTacToePiece newPiece = (TicTacToePiece) eventRequestObject.getArg();
+                TicTacToePiece newPiece = (TicTacToePiece) evt.getNewValue();
                 updateGameBoard(newPiece.getX(), newPiece.getY(), newPiece.getPiece());
             }
             case "win" -> {
-                Request eventRequestObject = (Request) evt.getNewValue();
+
                 Platform.runLater(() -> {
                     winLabelDisabled.setValue(false);
-                    winLabel.setValue(eventRequestObject.getArg() + " Wins!");
+                    winLabel.setValue(evt.getNewValue() + " Wins!");
                 });
                 turnSwitcher.setValue(false);
                 returnToLobby();
@@ -147,6 +159,13 @@ public class GameRoomViewModel implements ViewModel, Subject {
                 String txtMessage = message.getStringMessage();
                 Platform.runLater(() -> gameRoomChatMessages.add(senderName + ": " + txtMessage));
             }
+            case "gameInfoUpdate" -> {
+                GameData gameData = (GameData) evt.getNewValue();
+                roomId = gameData.getId();
+                String roomId = String.valueOf(gameData.getId());
+                String players = gameData.getPlayers();
+                Platform.runLater(() -> gameRoomInfo.set(roomId + " " + players));
+            }
         }
     }
 
@@ -163,5 +182,10 @@ public class GameRoomViewModel implements ViewModel, Subject {
     @Override
     public void removeListener(String propertyName, PropertyChangeListener listener) {
         support.removePropertyChangeListener(propertyName, listener);
+    }
+
+    @Override
+    public void removeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 }

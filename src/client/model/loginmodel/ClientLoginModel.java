@@ -33,4 +33,9 @@ public class ClientLoginModel implements LoginModel {
 	public void removeListener(String propertyName, PropertyChangeListener listener) {
 
 	}
+
+	@Override
+	public void removeListener(PropertyChangeListener listener) {
+
+	}
 }

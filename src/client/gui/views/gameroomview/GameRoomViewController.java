@@ -23,10 +23,12 @@ import java.io.IOException;
 
 public class GameRoomViewController implements ViewController, PropertyChangeListener {
 
+	@FXML private Label gameRoomInfoLabelId;
 	@FXML private GridPane gameBoard;
 	@FXML private Label gameInfo;
 	@FXML private ListView chatGameRoom;
 	@FXML private TextField textToSendGameRoom;
+
 	private ViewHandler viewHandler;
 	private GameRoomViewModel gameRoomViewModel;
 	private BooleanProperty myTurn;
@@ -55,6 +57,8 @@ public class GameRoomViewController implements ViewController, PropertyChangeLis
 		gameInfo.textProperty().bind(gameRoomViewModel.winLabelProperty());
 		gameInfo.disableProperty().bind(gameRoomViewModel.winLabelDisabledProperty());
 
+		gameRoomInfoLabelId.textProperty().bind(gameRoomViewModel.gameRoomInfoProperty());
+
 		gameRoomViewModel.txtMessageProperty().bind(textToSendGameRoom.textProperty());
 
 		this.gameRoomViewModel.addListener("ViewChange", this);
@@ -77,7 +81,7 @@ public class GameRoomViewController implements ViewController, PropertyChangeLis
 			}
 
 		} catch (RuntimeException runtimeException) {
-			System.out.println(runtimeException.getMessage());
+			runtimeException.printStackTrace();
 		}
 	}
 
@@ -112,7 +116,7 @@ public class GameRoomViewController implements ViewController, PropertyChangeLis
 						}
 					});
 				} catch (InterruptedException e) {
-					System.out.println(e.getMessage());
+					e.printStackTrace();
 				}
 			}).start();
 		}
