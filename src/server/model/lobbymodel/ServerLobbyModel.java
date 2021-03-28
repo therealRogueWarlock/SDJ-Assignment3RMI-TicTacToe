@@ -32,15 +32,15 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 
 
     public void addMessage(Message message) {
-//		System.out.println("Add message to lobby " + message.getName() + " " + message.getStringMessage());
+//		//System.out.println("Add message to lobby " + message.getName() + " " + message.getStringMessage());
         if (message.getTarget().equals("GameRoom")) {
             gameRooms.get(message.getTargetRoomId()).addMessage(message); /* Function fires PropertyChange automatically */
         } else {
-            System.out.println("ServerLobbyModel [addMessage()] > \t Attempting to send message to lobby from " + message.getName());
+            //System.out.println("ServerLobbyModel [addMessage()] > \t Attempting to send message to lobby from " + message.getName());
             chatRoom.addMessage(message); /* Does not fire a PropertyChange */
             iChanged("messageAddedLobby", message);
         }
-//		System.out.println(getAllMessages().toString());
+//		//System.out.println(getAllMessages().toString());
     }
 
     public void addPlayer(String name) {
@@ -84,8 +84,10 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
     }
 
     private void removeGameRoomById(int id) {
-        iChanged("gameRoomDel", id);
+        //System.out.println("ServerLobbyModel [removeGameRoomById()] > \t" + gameRooms);
         gameRooms.removeIf(gameRoom -> gameRoom.getRoomId() == id);
+        //System.out.println("ServerLobbyModel [removeGameRoomById()] > \t" + gameRooms);
+        iChanged("gameRoomDel", id);
     }
 
     public synchronized ServerGameRoomModel createGameRoom()  {
@@ -131,18 +133,16 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("resultMessage")) {
-            addMessage((Message) evt.getNewValue());
-        } else if (evt.getPropertyName().equals("gameRoomDel")) {
-            removeGameRoomById((Integer) evt.getNewValue());
-        }else{
-            iChanged(evt.getPropertyName(), evt.getNewValue());
+        switch (evt.getPropertyName()) {
+            case "resultMessage" -> addMessage((Message) evt.getNewValue());
+            case "gameRoomDel" -> removeGameRoomById((Integer) evt.getNewValue());
+            default -> iChanged(evt.getPropertyName(), evt.getNewValue());
         }
 
     }
 
     private void iChanged(String eventType, Object newValue) {
-//		System.out.println("ServerLobbyModel detected a change. Firing Change");
+//		//System.out.println("ServerLobbyModel detected a change. Firing Change");
         support.firePropertyChange(eventType, null, newValue);
     }
 

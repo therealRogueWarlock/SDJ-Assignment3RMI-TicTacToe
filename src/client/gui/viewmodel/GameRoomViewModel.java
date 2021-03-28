@@ -131,6 +131,7 @@ public class GameRoomViewModel implements ViewModel, Subject {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("GameRoomViewModel [propertyChange()] > \t Test Spot");
         String eventType = evt.getPropertyName();
 
         switch (eventType) {
@@ -165,6 +166,7 @@ public class GameRoomViewModel implements ViewModel, Subject {
             }
             case "gameInfoUpdate" -> {
                 GameData gameData = (GameData) evt.getNewValue();
+                System.out.println("GameRoomViewModel [propertyChange()] > \t" + ((GameData)evt.getNewValue()).getId());
                 roomId = gameData.getId();
                 String roomId = String.valueOf(gameData.getId());
                 String players = gameData.getPlayers();

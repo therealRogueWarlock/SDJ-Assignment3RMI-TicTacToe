@@ -51,16 +51,6 @@ public class RMIClient implements Client, ClientCallback {
     }
 
     @Override
-    public boolean joinGame(int roomId) {
-        try {
-            return ticTacToeGameServer.joinGameRoom(this, roomId, clientName);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
     public boolean hostGame() {
         try {
             return ticTacToeGameServer.host(this, clientName);
@@ -68,6 +58,16 @@ public class RMIClient implements Client, ClientCallback {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean joinGame(int roomId) {
+        try {
+            return ticTacToeGameServer.joinGameRoom(this, roomId, clientName);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class RMIClient implements Client, ClientCallback {
     }
 
     private void iChanged(PropertyChangeEvent event) {
-        System.out.println("ServerLobby model detect change, fire change");
+//        System.out.println("RMIClient [iChanged()]");
         support.firePropertyChange(event);
     }
 

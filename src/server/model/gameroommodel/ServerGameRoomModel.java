@@ -31,16 +31,16 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
         if (addPlayerInfo(playerName)) {
             System.out.println("ServerGameRoomModel (line 31) > \tAdding " + listener + " to gameroom with id " + gameRoomId);
 
-            this.addListener("piecePlaced", listener);
-            this.addListener("win", listener);
-            this.addListener("draw", listener);
-            this.addListener("turnSwitch", listener);
-            this.addListener("messageAddedGameRoom", listener);
-            this.addListener("gameRoomDel", listener);
-            this.addListener("gameInfoUpdate", listener);
+            addListener("piecePlaced", listener);
+            addListener("win", listener);
+            addListener("draw", listener);
+            addListener("turnSwitch", listener);
+            addListener("messageAddedGameRoom", listener);
+            addListener("gameRoomDel", listener);
+            addListener("gameInfoUpdate", listener);
 
-            this.iChanged("turnSwitch", null);
-            this.iChanged("gameInfoUpdate", new GameData(getRoomId(), getPlayerNames()));
+            iChanged("turnSwitch", null);
+            iChanged("gameInfoUpdate", new GameData(getRoomId(), getPlayerNames()));
 
             return true;
         }

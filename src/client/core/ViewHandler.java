@@ -27,33 +27,13 @@ public class ViewHandler {
 	}
 
 	public void openView(String viewToOpen) throws IOException {
-		Scene scene;
-		Parent root;
-
-		FXMLLoader loader = new FXMLLoader();
-
-		loader.setLocation(getClass().getResource("../gui/views/" + viewToOpen.toLowerCase() + "view/" + viewToOpen + "View.fxml"));
-		root = loader.load();
-		ViewController viewController = loader.getController();
-		viewController.init(this, getViewModelByViewName(viewToOpen));
-
-		scene = new Scene(root);
+		Scene scene = sceneLoader(viewToOpen);
 		stage.setScene(scene);
 		stage.show();
 	}
 
-
 	public void loadView(String viewToOpen) throws IOException {
-		Parent root;
-
-		FXMLLoader loader = new FXMLLoader();
-
-		loader.setLocation(getClass().getResource("../gui/views/" + viewToOpen.toLowerCase() + "view/" + viewToOpen + "View.fxml"));
-		root = loader.load();
-		ViewController viewController = loader.getController();
-		viewController.init(this, getViewModelByViewName(viewToOpen));
-
-		loadedScene = new Scene(root);
+		loadedScene = sceneLoader(viewToOpen);
 	}
 
 	public void swapToLoadedView(){
@@ -61,27 +41,28 @@ public class ViewHandler {
 		stage.show();
 	}
 
+	private Scene sceneLoader(String view) throws IOException {
+		Scene scene;
+		Parent root;
 
+		FXMLLoader loader = new FXMLLoader();
+
+		loader.setLocation(getClass().getResource("../gui/views/" + view.toLowerCase() + "view/" + view + "View.fxml"));
+		root = loader.load();
+		ViewController viewController = loader.getController();
+		viewController.init(this, getViewModelByViewName(view));
+
+		scene = new Scene(root);
+		return scene;
+	}
 
 	private ViewModel getViewModelByViewName(String viewName) {
-		// Lambda Expression for et Switch på ViewName
 		return switch (viewName) {
 			case "Login" -> viewModelFactory.getLoginViewModel();
 			case "Lobby" -> viewModelFactory.getLobbyViewModel();
 			case "GameRoom" -> viewModelFactory.getGameRoomViewModel();
 			default -> null;
 		};
-// 		Skrevet ud til et normalt switch
-//		switch (viewName) {
-//			case "Login":
-//				return viewModelFactory.getLoginViewModel();
-//			case "Lobby":
-//				return viewModelFactory.getLobbyViewModel();
-//			case "GameRoom":
-//				return viewModelFactory.getGameRoomViewModel();
-//			default:
-//				return null;
-//		}
 	}
 
 }

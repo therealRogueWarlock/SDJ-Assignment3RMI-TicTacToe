@@ -63,13 +63,10 @@ public class LobbyViewController implements ViewController {
 	}
 
 	public void joinGame() throws IOException {
-
 		viewHandler.loadView("GameRoom");
-
 		if (lobbyViewModel.join()) {
 			viewHandler.swapToLoadedView();
 		}
-
 	}
 
 	@Override
