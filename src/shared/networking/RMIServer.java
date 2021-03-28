@@ -1,13 +1,11 @@
 package shared.networking;
 
-import client.networking.RMIClient;
 import server.model.lobbymodel.ServerLobbyModel;
 import shared.transferobjects.Message;
 import shared.transferobjects.ServerData;
 import shared.transferobjects.TicTacToePiece;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -21,7 +19,7 @@ public interface RMIServer extends Remote {
 
     void loginPlayer(String playerName) throws RemoteException;
 
-    void host(ClientCallback clientCallback, String playerName) throws RemoteException;
+    boolean host(ClientCallback clientCallback, String playerName) throws RemoteException;
 
     boolean joinGameRoom(ClientCallback clientCallback, int roomId, String playerName) throws RemoteException;
 

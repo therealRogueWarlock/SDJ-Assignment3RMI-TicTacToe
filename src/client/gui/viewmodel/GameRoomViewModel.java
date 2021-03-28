@@ -83,8 +83,12 @@ public class GameRoomViewModel implements ViewModel, Subject {
         Platform.runLater(() -> slots.get(convert2dTo1d(x, y)).setValue(String.valueOf(symbol)));
     }
 
-    public void sendMessage(Message message) {
-        clientGameRoomModel.sendMessage(message);
+    public void sendMessage() {
+        Message newMessage = new Message(txtMessage.getValue());
+        newMessage.setTarget("GameRoom");
+        newMessage.setTargetRoomId(roomId);
+        System.out.println("Send Message to" + roomId);
+        clientGameRoomModel.sendMessage(newMessage);
     }
 
     private void returnToLobby() {

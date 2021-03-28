@@ -12,7 +12,7 @@ public interface Client extends Subject {
 
 	boolean joinGame(int roomId);
 
-	void hostGame();
+	boolean hostGame();
 
 	void update();
 

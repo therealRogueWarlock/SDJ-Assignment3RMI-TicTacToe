@@ -22,8 +22,8 @@ public class ClientLobbyModel implements LobbyModel, PropertyChangeListener {
 		this.client.addListener("Update", this);
 	}
 
-	public void host() {
-		client.hostGame();
+	public boolean host() {
+		return client.hostGame();
 	}
 
 	@Override

@@ -34,8 +34,7 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
     public void addMessage(Message message) {
 //		System.out.println("Add message to lobby " + message.getName() + " " + message.getStringMessage());
         if (message.getTarget().equals("GameRoom")) {
-            System.out.println("ServerLobbyModel [addMessage()] > \t Attempting to send message to game 0");
-            gameRooms.get(0).addMessage(message); /* Function fires PropertyChange automatically */                     //FIXME: Virker kun til at sende til det første gameroom. Løsningen til placePiece() kan også bruges her
+            gameRooms.get(message.getTargetRoomId()).addMessage(message); /* Function fires PropertyChange automatically */
         } else {
             System.out.println("ServerLobbyModel [addMessage()] > \t Attempting to send message to lobby from " + message.getName());
             chatRoom.addMessage(message); /* Does not fire a PropertyChange */

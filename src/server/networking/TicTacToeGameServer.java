@@ -1,6 +1,5 @@
 package server.networking;
 
-import client.networking.RMIClient;
 import server.model.gameroommodel.ServerGameRoomModel;
 import server.model.lobbymodel.ServerLobbyModel;
 import shared.networking.ClientCallback;
@@ -45,7 +44,7 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     }
 
     @Override
-    public synchronized void host(ClientCallback clientCallback, String playerName) {
+    public synchronized boolean host(ClientCallback clientCallback, String playerName) {
         ServerGameRoomModel gameRoom = serverLobbyModel.createGameRoom();
 
         gameRoom.addListener("resultMessage", this);
@@ -54,7 +53,7 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
         //gameRoom.addListener("messageAddedGameRoom", this);
 
 
-        PropertyChangeListener listener = new PropertyChangeListener() {                                                // FIXME: Sander, Klienten skal have at vide, at der er oprettet et nyt rum
+        PropertyChangeListener listener = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {                                                       // FIXME: Den får intet evt??
                 try {
@@ -67,13 +66,21 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
             }
         };
 
-        gameRoom.join(listener, playerName);
 
-        GameData newGameRoomData =  new GameData(gameRoom.getRoomId(), gameRoom.getPlayerNames());
+        if (gameRoom.join(listener, playerName)){
+            System.out.println(playerName + " hosted and joined" + "Room: "+ gameRoom.getRoomId());
 
-        propertyChange(
-                new PropertyChangeEvent(
+
+            GameData newGameRoomData =  new GameData(gameRoom.getRoomId(), gameRoom.getPlayerNames());
+
+            propertyChange(
+                    new PropertyChangeEvent(
                         this, "gameRoomAdd", null, newGameRoomData));
+
+            return true;
+        }
+
+        return false;
 
     }
 

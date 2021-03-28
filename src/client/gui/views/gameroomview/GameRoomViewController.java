@@ -87,9 +87,7 @@ public class GameRoomViewController implements ViewController, PropertyChangeLis
 
 	public void sendTextGameButton() {
 		if (!textToSendGameRoom.getText().isEmpty()) {
-			Message newMessage = new Message(textToSendGameRoom.getText());
-			newMessage.setTarget("GameRoom");
-			gameRoomViewModel.sendMessage(newMessage);
+			gameRoomViewModel.sendMessage();
 			textToSendGameRoom.clear();
 		}
 	}

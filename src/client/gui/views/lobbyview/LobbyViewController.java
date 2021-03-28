@@ -44,9 +44,9 @@ public class LobbyViewController implements ViewController {
 	}
 
 	public void hostGame() throws IOException {
-		lobbyViewModel.host();
+		if (lobbyViewModel.host())
+			swapScene("GameRoom");
 
-		swapScene("GameRoom");
 	}
 
 	public void sendTextLobby() {

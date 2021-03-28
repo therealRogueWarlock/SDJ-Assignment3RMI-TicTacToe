@@ -61,11 +61,12 @@ public class RMIClient implements Client, ClientCallback {
     }
 
     @Override
-    public void hostGame() {
+    public boolean hostGame() {
         try {
-            ticTacToeGameServer.host(this, clientName);
+            return ticTacToeGameServer.host(this, clientName);
         } catch (RemoteException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
