@@ -5,6 +5,7 @@ import client.gui.views.ViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -13,10 +14,12 @@ public class ViewHandler {
 
 	private ViewModelFactory viewModelFactory;
 	private Stage stage;
+	private Scene scene;
 
 	public ViewHandler(Stage stage, ViewModelFactory viewModelFactory) {
 		this.stage = stage;
 		this.viewModelFactory = viewModelFactory;
+
 	}
 
 	public void start() throws IOException {
@@ -38,6 +41,27 @@ public class ViewHandler {
 		stage.setScene(scene);
 		stage.show();
 	}
+
+
+	public void loadView(String viewToOpen) throws IOException {
+		Parent root;
+
+		FXMLLoader loader = new FXMLLoader();
+
+		loader.setLocation(getClass().getResource("../gui/views/" + viewToOpen.toLowerCase() + "view/" + viewToOpen + "View.fxml"));
+		root = loader.load();
+		ViewController viewController = loader.getController();
+		viewController.init(this, getViewModelByViewName(viewToOpen));
+
+		scene = new Scene(root);
+	}
+
+	public void swapToLoadedView(){
+		stage.setScene(scene);
+		stage.show();
+	}
+
+
 
 	private ViewModel getViewModelByViewName(String viewName) {
 		// Lambda Expression for et Switch på ViewName

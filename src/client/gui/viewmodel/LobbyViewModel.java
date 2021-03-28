@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import shared.transferobjects.Message;
 import shared.transferobjects.Request;
+import shared.transferobjects.ServerData;
 import shared.util.LobbyModel;
 
 import java.beans.PropertyChangeEvent;
@@ -75,8 +76,8 @@ public class LobbyViewModel implements ViewModel, PropertyChangeListener {
 	}
 
 	private void updateListViews(PropertyChangeEvent evt){
-		ArrayList<Message> lobbyChat = (ArrayList<Message>) ((Request) evt.getNewValue()).getArg();
-		ArrayList<GameData> allGameRoomGameData = (ArrayList<GameData>) ((Request) evt.getNewValue()).getArg2();
+		ArrayList<Message> lobbyChat = (ArrayList<Message>) ((ServerData) evt.getNewValue()).getArg();
+		ArrayList<GameData> allGameRoomGameData = (ArrayList<GameData>) ((ServerData) evt.getNewValue()).getArg2();
 		Platform.runLater(()-> {
 			lobbyChatMessages.clear();
 			for (Message message: lobbyChat) {

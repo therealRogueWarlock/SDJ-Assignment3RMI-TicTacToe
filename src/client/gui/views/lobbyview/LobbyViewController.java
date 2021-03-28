@@ -44,8 +44,9 @@ public class LobbyViewController implements ViewController {
 	}
 
 	public void hostGame() throws IOException {
+		viewHandler.loadView("GameRoom");
 		if (lobbyViewModel.host())
-			swapScene("GameRoom");
+			viewHandler.swapToLoadedView();
 
 	}
 
@@ -61,13 +62,12 @@ public class LobbyViewController implements ViewController {
 		System.exit(1);
 	}
 
-	public void joinGame() {
+	public void joinGame() throws IOException {
+
+		viewHandler.loadView("GameRoom");
+
 		if (lobbyViewModel.join()) {
-			try {
-				swapScene("GameRoom");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			viewHandler.swapToLoadedView();
 		}
 
 	}
