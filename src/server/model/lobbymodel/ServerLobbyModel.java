@@ -84,9 +84,9 @@ public class ServerLobbyModel implements LobbyModel, PropertyChangeListener {
     }
 
     private void removeGameRoomById(int id) {
-        //System.out.println("ServerLobbyModel [removeGameRoomById()] > \t" + gameRooms);
+        System.out.println("ServerLobbyModel [removeGameRoomById()] > \t" + gameRooms);
         gameRooms.removeIf(gameRoom -> gameRoom.getRoomId() == id);
-        //System.out.println("ServerLobbyModel [removeGameRoomById()] > \t" + gameRooms);
+        System.out.println("ServerLobbyModel [removeGameRoomById()] > \t" + gameRooms);
         iChanged("gameRoomDel", id);
     }
 

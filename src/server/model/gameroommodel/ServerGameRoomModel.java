@@ -85,11 +85,16 @@ public class ServerGameRoomModel implements GameRoomModel, Serializable {
 
             iChanged("win", ticTacToePiece.getPiece());
 
-            iChanged("gameRoomDel", gameRoomId);                                                                    // FIXME: Skal dette ikke ske som det aller sidste?
+
+
+
 
             Message newMessage = new Message(getPlayerNames() + " : " + winnerName + " Won!");
             newMessage.setName("Lobby");
+
             iChanged("resultMessage", newMessage);
+
+            iChanged("gameRoomDel", gameRoomId);
 
 
         } else if (ticTacToe.checkDraw()) {

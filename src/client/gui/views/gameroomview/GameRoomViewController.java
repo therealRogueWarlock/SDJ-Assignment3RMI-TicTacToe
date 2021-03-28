@@ -15,7 +15,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import shared.transferobjects.Message;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

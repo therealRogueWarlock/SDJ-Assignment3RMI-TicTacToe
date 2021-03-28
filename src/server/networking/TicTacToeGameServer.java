@@ -47,9 +47,9 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     public synchronized boolean host(ClientCallback clientCallback, String playerName) {
         ServerGameRoomModel gameRoom = serverLobbyModel.createGameRoom();
 
-        gameRoom.addListener("resultMessage", this);
-        gameRoom.addListener("gameRoomDel", this);
-        gameRoom.addListener("gameRoomAdd", this);
+        gameRoom.addListener("resultMessage", serverLobbyModel);
+        gameRoom.addListener("gameRoomDel", serverLobbyModel);
+
         //gameRoom.addListener("messageAddedGameRoom", this);
         PropertyChangeListener listener = new PropertyChangeListener() {
             @Override
@@ -64,12 +64,12 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
             }
         };
 
-        if (gameRoom.join(listener, playerName)){
+        if (gameRoom.join(listener, playerName)) {
 //            System.out.println(playerName + " hosted and joined" + "Room: "+ gameRoom.getRoomId());
-            GameData newGameRoomData =  new GameData(gameRoom.getRoomId(), gameRoom.getPlayerNames());
+            GameData newGameRoomData = new GameData(gameRoom.getRoomId(), gameRoom.getPlayerNames());
             propertyChange(
                     new PropertyChangeEvent(
-                        this, "gameRoomAdd", null, newGameRoomData));
+                            this, "gameRoomAdd", null, newGameRoomData));
             return true;
         }
         return false;
@@ -92,8 +92,8 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
             }
         };
 
-        if (serverLobbyModel.join(listener, roomId, playerName)){
-            broadcast(new PropertyChangeEvent(this,"Update", null, getServerDate()));
+        if (serverLobbyModel.join(listener, roomId, playerName)) {
+            broadcast(new PropertyChangeEvent(this, "Update", null, getServerDate()));
             return true;
         }
 
@@ -109,15 +109,18 @@ public class TicTacToeGameServer implements RMIServer, PropertyChangeListener {
     @Override
     public void broadcast(PropertyChangeEvent evt) {
 
-        new Thread( () -> { for (ClientCallback client : clientCallbacks) {
-            try {
-                client.updated(evt);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+        new Thread(() -> {
+            for (ClientCallback client : clientCallbacks) {
+                try {
+                    client.updated(evt);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
-        } }
+        }
         ).start();
     }
+
 
     @Override
     public ServerData getServerDate() {
