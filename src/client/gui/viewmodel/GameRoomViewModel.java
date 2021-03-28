@@ -56,7 +56,7 @@ public class GameRoomViewModel implements ViewModel, Subject {
 
 
         turnSwitcher = new SimpleBooleanProperty();
-        turnSwitcher.setValue(true);
+        turnSwitcher.setValue(false);
 
         slots = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
